@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Kindle Proxy
+
+server:
+  port: 80
