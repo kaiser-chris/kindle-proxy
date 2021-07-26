@@ -7,15 +7,15 @@
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <div style="visibility: hidden;" id="menu">
             <a id="home" class="button-menu" th:href="${home}">
-                <div class="icon"><img alt="Sync Icon" src="/img/home-solid.svg"></div>
+                <div class="icon"><img alt="Home Icon" src="/img/home-solid.svg"></div>
                 <div class="title"><span>Overview</span></div>
             </a>
             <a id="previous" class="button-menu" th:href="${previous}">
-                <div class="icon"><img alt="Sync Icon" src="/img/arrow-left-solid.svg"></div>
+                <div class="icon"><img alt="Arrow Left Icon" src="/img/arrow-left-solid.svg"></div>
                 <div class="title"><span>Previous Chapter</span></div>
             </a>
             <a id="next" class="button-menu" th:href="${next}">
-                <div class="icon"><img alt="Sync Icon" src="/img/arrow-right-solid.svg"></div>
+                <div class="icon"><img alt="Arrow Right Icon" src="/img/arrow-right-solid.svg"></div>
                 <div class="title"><span>Next Chapter</span></div>
             </a>
             <a id="calibrate" class="button-menu" th:href="'/calibrate/?redirect=' + ${#uris.escapePathSegment('/render/proxy/' + proxyId + '/?book=' + bookId + '&chapter=' + chapterId + '&page=' + page)}">
