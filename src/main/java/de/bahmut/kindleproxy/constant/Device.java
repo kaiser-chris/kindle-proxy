@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum Device {
 
     UNKNOWN("Unknown Device", -1, -1, 16, "unknown.css"),
-    KINDLE_PAPERWHITE("Kindle Paperwhite", 718, 890, 24, "kindle-paperwhite.css");
+    KINDLE_PAPERWHITE("Kindle Paperwhite", 740, 890, 24, "kindle-paperwhite.css");
 
     private final String name;
     private final int width;

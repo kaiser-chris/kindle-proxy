@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<!--suppress CheckEmptyScriptTag -->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Literata&family=Roboto&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/8dda43898a.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="/css/main.css">
+        <link rel="stylesheet" type="text/css" href="/css/fontawesome.min.css">
+        <link rel="stylesheet" type="text/css" th:href="'/css/device/' + ${device.getCssFile()}">
+        <script async="" type="text/javascript" src="/js/page.js"></script>
+        <meta charset="UTF-8">
+        <title th:text="${content.getTitle()}" />
+    </head>
+    <body>
+        <a onclick="toggleMenu();" class="touch-link" id="top"></a>
+        <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
+        <div style="visibility: hidden;" id="menu">
+            <a id="previous" class="button-menu" th:href="${previous}">
+                <div class="icon"><img alt="Sync Icon" src="/img/arrow-left-solid.svg"></div>
+                <div class="title"><span>Previous Chapter</span></div>
+            </a>
+            <a id="next" class="button-menu" th:href="${next}">
+                <div class="icon"><img alt="Sync Icon" src="/img/arrow-right-solid.svg"></div>
+                <div class="title"><span>Next Chapter</span></div>
+            </a>
+            <a id="calibrate" class="button-menu" th:href="'/calibrate/?redirect=' + ${#uris.escapePathSegment('/render/proxy/' + proxyId + '/?book=' + bookId + '&chapter=' + chapterId + '&page=' + page)}">
+                <div class="icon"><img alt="Sync Icon" src="/img/sync-solid.svg"></div>
+                <div class="title"><span>Calibrate</span></div>
+            </a>
+        </div>
+        <a onclick="prevPage();" class="touch-link" id="left"></a>
+        <a onclick="nextPage();" class="touch-link" id="right"></a>
+        <div id="content" th:utext="${content.getBody()}"/>
+    </body>
+</html>

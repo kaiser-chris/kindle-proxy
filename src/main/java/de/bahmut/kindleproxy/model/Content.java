@@ -13,4 +13,8 @@ public class Content {
 
     private String body;
 
+    private String nextContent;
+
+    private String previousContent;
+
 }
