@@ -1,13 +1,12 @@
 package de.bahmut.kindleproxy.web;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
 import de.bahmut.kindleproxy.constant.Device;
 import de.bahmut.kindleproxy.exception.ProxyException;
-import de.bahmut.kindleproxy.model.Content;
+import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.font.DeviceCalibration;
 import de.bahmut.kindleproxy.service.CalibrationCacheService;
 import de.bahmut.kindleproxy.service.PageRenderService;
@@ -44,26 +43,27 @@ public class RenderController {
             final Model model
     ) throws ProxyException, IOException {
         if (page <= 0) {
-            return "redirect:" + buildUrl(proxyId, bookId, chapterId, 1);
+            return "redirect:" + getRenderUrl(proxyId, bookId, chapterId, 1);
         }
-        final Content content = proxyService.getChapter(bookId, chapterId);
+        final Chapter chapter = proxyService.getChapter(bookId, chapterId);
         final Optional<DeviceCalibration> calibration = calibrationCacheService.findCalibration(agent);
         if (calibration.isEmpty()) {
-            return "redirect:/calibrate/?redirect=" + encode(buildUrl(proxyId, bookId, chapterId, page), UTF_8);
+            return "redirect:/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8);
         }
-        final Content pageContent = renderService.renderPage(content, page, Device.KINDLE_PAPERWHITE, calibration.get());
+        final Chapter chapterPage = renderService.renderPage(chapter, page, Device.KINDLE_PAPERWHITE, calibration.get());
         model.addAttribute("proxyId", proxyId);
         model.addAttribute("bookId", encode(bookId, UTF_8));
         model.addAttribute("chapterId", encode(chapterId, UTF_8));
         model.addAttribute("page", page);
-        model.addAttribute("content", pageContent);
+        model.addAttribute("content", chapterPage);
         model.addAttribute("device", calibration.get().getDevice());
-        model.addAttribute("next", buildUrl(proxyId, bookId, pageContent.getNextContent(), 1));
-        model.addAttribute("previous", buildUrl(proxyId, bookId, pageContent.getPreviousContent(), 1));
+        model.addAttribute("next", getRenderUrl(proxyId, bookId, chapterPage.getNextChapterIdentifier(), 1));
+        model.addAttribute("home", BrowseController.getBookUrl(proxyId, bookId));
+        model.addAttribute("previous", getRenderUrl(proxyId, bookId, chapterPage.getPreviousChapterIdentifier(), 1));
         return "render";
     }
 
-    private String buildUrl(
+    public static String getRenderUrl(
             final UUID proxyId,
             final String bookId,
             final String chapterId,

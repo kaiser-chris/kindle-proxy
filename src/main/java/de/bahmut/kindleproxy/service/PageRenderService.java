@@ -1,7 +1,7 @@
 package de.bahmut.kindleproxy.service;
 
 import de.bahmut.kindleproxy.constant.Device;
-import de.bahmut.kindleproxy.model.Content;
+import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.font.DeviceCalibration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,15 +16,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PageRenderService {
 
-    public Content renderPage(final Content content, final int pageNumber, final Device device, final DeviceCalibration calibration) {
-        return calculatePage(content, pageNumber, device, calibration);
+    public Chapter renderPage(final Chapter chapter, final int pageNumber, final Device device, final DeviceCalibration calibration) {
+        return calculatePage(chapter, pageNumber, device, calibration);
     }
 
-    private Content calculatePage(final Content content, final int pageNumber, final Device device, final DeviceCalibration calibration) {
+    private Chapter calculatePage(final Chapter chapter, final int pageNumber, final Device device, final DeviceCalibration calibration) {
         if (device.getWidth() < 0 || device.getHeight() < 0) {
-            return content;
+            return chapter;
         }
-        final Document page = Jsoup.parse(content.getBody());
+        final Document page = Jsoup.parse(chapter.getBody());
         final Elements paragraphs = page.getElementsByTag("p");
         final var pageBuilder = new StringBuilder();
         int currentPage = 1;
@@ -45,7 +45,14 @@ public class PageRenderService {
             }
             currentPageHeight += elementHeight;
         }
-        return new Content(content.getTitle(), pageBuilder.toString(), content.getNextContent(), content.getPreviousContent());
+        return new Chapter(
+                chapter.getIdentifier(),
+                chapter.getBookIdentifier(),
+                chapter.getTitle(),
+                pageBuilder.toString(),
+                chapter.getNextChapterIdentifier(),
+                chapter.getPreviousChapterIdentifier()
+        );
     }
 
     private int calculateParagraphHeight(final Element paragraph, final Device device, final DeviceCalibration calibration) {

@@ -7,14 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Content {
+public class ChapterReference {
 
-    private String title;
+    private String identifier;
 
-    private String body;
-
-    private String nextContent;
-
-    private String previousContent;
+    private String name;
 
 }

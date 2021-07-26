@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<!--suppress CheckEmptyScriptTag, HtmlRequiredTitleElement -->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head th:replace="fragments/general.html :: headerfiles(title='Browse - ' + ${title})" />
+    <body>
+        <h1 th:text="'Browse - ' + ${title}" />
+        <ul>
+            <li th:each="link : ${list.entrySet()}">
+                <a th:href="${link.getValue()}" th:text="${link.getKey()}" />
+            </li>
+        </ul>
+    </body>
+</html>

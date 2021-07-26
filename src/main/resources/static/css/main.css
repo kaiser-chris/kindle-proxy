@@ -1,11 +1,17 @@
-html{
+html {
     min-height: 100%;
     position: relative;
+    font-size: 24px;
+}
+
+:root {
+    font-size: 24px;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
     height: 100%;
+    font-size: 24px;
 }
 
 .touch-link {
@@ -42,14 +48,6 @@ body {
         visibility: hidden;
     }
 
-a#calibrate {
-    float: right;
-}
-
-a#next, a#previous {
-    float: left;
-}
-
 #calibrate-js-fail {
     display: block;
     position: absolute;
@@ -85,6 +83,7 @@ div#menu {
         color: #000000;
         text-decoration: none;
         padding: 0.5em 0 0.5em;
+        float: left;
     }
         div#menu a.button-menu .icon {
             position: relative;
@@ -110,6 +109,10 @@ div#menu {
         }
 
 div#content {
+    box-sizing: border-box;
+    height: 890px;
+    width: 740px;
+    overflow: hidden;
     position: relative;
     padding: 20px;
     text-align: justify;
