@@ -1,7 +1,6 @@
 function calibrate() {
     var tests = document.getElementsByClassName("char-test");
     var params = document.location.search;
-    var params = '';
     console.log(params);
     if (params.indexOf('?') != -1) {
         params += '&';

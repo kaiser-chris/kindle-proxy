@@ -1,3 +1,7 @@
+proxy:
+  royal-road:
+    favorites-user-id: ${ROYAL_ROAD_PROFILE:}
+
 spring:
   application:
     name: Kindle Proxy

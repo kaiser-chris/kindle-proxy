@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-import de.bahmut.kindleproxy.constant.Device;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.font.DeviceCalibration;
 import de.bahmut.kindleproxy.service.CalibrationCacheService;
+import de.bahmut.kindleproxy.service.DeviceDetectionService;
 import de.bahmut.kindleproxy.service.PageRenderService;
 import de.bahmut.kindleproxy.service.ProxyService;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class RenderController {
         if (calibration.isEmpty()) {
             return "redirect:/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8);
         }
-        final Chapter chapterPage = renderService.renderPage(chapter, page, Device.KINDLE_PAPERWHITE, calibration.get());
+        final Chapter chapterPage = renderService.renderPage(chapter, page, calibration.get().getDevice(), calibration.get());
         model.addAttribute("proxyId", proxyId);
         model.addAttribute("bookId", encode(bookId, UTF_8));
         model.addAttribute("chapterId", encode(chapterId, UTF_8));

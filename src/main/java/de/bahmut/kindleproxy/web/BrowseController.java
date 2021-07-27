@@ -17,7 +17,6 @@ import de.bahmut.kindleproxy.model.ChapterReference;
 import de.bahmut.kindleproxy.service.ProxyService;
 import de.bahmut.kindleproxy.util.StreamHelper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

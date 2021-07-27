@@ -8,13 +8,12 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Device {
 
-    UNKNOWN("Unknown Device", -1, -1, 16, "unknown.css"),
-    KINDLE_PAPERWHITE("Kindle Paperwhite", 740, 890, 24, "kindle-paperwhite.css");
+    UNKNOWN("Unknown Device", -1, -1, 24),
+    KINDLE_PAPERWHITE_2("Kindle Paperwhite", 740, 890, 24);
 
     private final String name;
     private final int width;
     private final int height;
     private final int fontSize;
-    private final String cssFile;
 
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class DeviceDetectionService {
 
     public Device detectDevice() {
-        return Device.KINDLE_PAPERWHITE;
+        return Device.KINDLE_PAPERWHITE_2;
     }
 
 }
