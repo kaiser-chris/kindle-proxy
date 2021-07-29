@@ -46,7 +46,6 @@
 			<version>3.12.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -62,6 +61,34 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.6</version>
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<configuration>
+							<webappSourceDir>${basedir}/src/main/resources</webappSourceDir>
+							<webappTargetDir>${project.build.directory}/classes</webappTargetDir>
+							<nosuffix>true</nosuffix>
+							<skipMerge>true</skipMerge>
+							<cssSourceDir>static/css</cssSourceDir>
+							<jsSourceDir>static/js</jsSourceDir>
+							<cssSourceIncludes>
+								<cssSourceInclude>*.css</cssSourceInclude>
+							</cssSourceIncludes>
+							<jsSourceIncludes>
+								<jsSourceInclude>*.js</jsSourceInclude>
+							</jsSourceIncludes>
+						</configuration>
+						<phase>compile</phase>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
