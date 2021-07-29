@@ -11,7 +11,7 @@
 
 	<groupId>de.bahmut</groupId>
 	<artifactId>kindle-proxy</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Kindle Proxy</name>
 	<description>Simple Amazon Kindle Proxy</description>
 
@@ -98,6 +98,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+						<name>ghcr.io/kaiser-chris/kindle-proxy:${project.version}</name>
+					</image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
