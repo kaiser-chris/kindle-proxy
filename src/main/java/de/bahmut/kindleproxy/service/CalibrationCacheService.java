@@ -10,22 +10,35 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bahmut.kindleproxy.model.font.DeviceCalibration;
-import lombok.RequiredArgsConstructor;
+import de.bahmut.kindleproxy.exception.CalibrationException;
+import de.bahmut.kindleproxy.model.DeviceCalibration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class CalibrationCacheService {
-
-    private static final Path CACHE_FOLDER = Path.of("D:\\Development\\kindle-cache");
 
     private static final double DEFAULT_RATIO = 0.9;
 
-    private final DeviceDetectionService deviceDetectionService;
     private final ObjectMapper jsonMapper;
+    private final Path cacheFolder;
 
-    public void cacheCalibration(final String agent, final Map<String, String> queryParameters) {
+    public CalibrationCacheService(
+            final ObjectMapper jsonMapper,
+            @Value("${proxy.calibration.cache-directory}") final Path cacheFolder
+    ) throws CalibrationException {
+        this.jsonMapper = jsonMapper;
+        this.cacheFolder = cacheFolder;
+        if (Files.notExists(cacheFolder)) {
+            try {
+                Files.createDirectories(cacheFolder);
+            } catch (final IOException e) {
+                throw new CalibrationException("Could not create cache directory", e);
+            }
+        }
+    }
+
+    public void cacheCalibration(final String agent, final Map<String, String> queryParameters) throws CalibrationException {
         final Map<Character, Double> characters = new HashMap<>();
         for (final Map.Entry<String, String> entry : queryParameters.entrySet()) {
             if (entry.getKey().length() != 1) {
@@ -36,7 +49,7 @@ public class CalibrationCacheService {
             try {
                 ratio = Double.parseDouble(entry.getValue());
             } catch(final NumberFormatException e) {
-                continue;
+                throw new CalibrationException("Could not parse character ratio for char " + character, e);
             }
             characters.put(character, ratio);
         }
@@ -46,18 +59,25 @@ public class CalibrationCacheService {
         } else {
             defaultRatio = DEFAULT_RATIO;
         }
-        final var device = new DeviceCalibration(agent, deviceDetectionService.detectDevice(), defaultRatio, characters);
-        final Path cacheFile = CACHE_FOLDER.resolve(UUID.nameUUIDFromBytes(device.getUserAgent().getBytes(StandardCharsets.UTF_8)) + ".json");
+        final int width;
+        final int height;
+        try {
+            width = Integer.parseInt(queryParameters.get("width"));
+            height = Integer.parseInt(queryParameters.get("height"));
+        } catch(final NumberFormatException e) {
+            throw new CalibrationException("Could not parse resolution", e);
+        }
+        final var device = new DeviceCalibration(agent, width, height, defaultRatio, characters);
+        final Path cacheFile = cacheFolder.resolve(UUID.nameUUIDFromBytes(device.getUserAgent().getBytes(StandardCharsets.UTF_8)) + ".json");
         try {
             Files.writeString(cacheFile, jsonMapper.writeValueAsString(device));
         } catch (final IOException e) {
-            //TODO
-            throw new RuntimeException(e);
+            throw new CalibrationException("Could not cache calibration", e);
         }
     }
 
     public Optional<DeviceCalibration> findCalibration(final String agent) throws IOException {
-        final Path cacheFile = CACHE_FOLDER.resolve(UUID.nameUUIDFromBytes(agent.getBytes(StandardCharsets.UTF_8)) + ".json");
+        final Path cacheFile = cacheFolder.resolve(UUID.nameUUIDFromBytes(agent.getBytes(StandardCharsets.UTF_8)) + ".json");
         if (Files.notExists(cacheFile)) {
             return Optional.empty();
         }

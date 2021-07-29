@@ -1,9 +1,0 @@
-<!DOCTYPE HTML>
-<!--suppress CheckEmptyScriptTag, HtmlRequiredTitleElement -->
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title='404 Page Not Found')" />
-    <body>
-        <h1>Could not find page</h1>
-        <p th:text="'Could not find: ' + ${reason}" />
-    </body>
-</html>

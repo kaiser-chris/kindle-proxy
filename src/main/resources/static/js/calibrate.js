@@ -1,7 +1,6 @@
 function calibrate() {
     var tests = document.getElementsByClassName("char-test");
     var params = document.location.search;
-    console.log(params);
     if (params.indexOf('?') != -1) {
         params += '&';
     } else {
@@ -13,6 +12,10 @@ function calibrate() {
         var ratio = Math.round(((element.clientWidth + 1) / (element.clientHeight + 1)) * 100) / 100;
         params += '&' + encodeURIComponent(element.innerHTML) + '=' + encodeURIComponent(ratio);
     }
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    params += '&width=' + width;
+    params += '&height=' + height;
     document.location.search = params;
 }
 

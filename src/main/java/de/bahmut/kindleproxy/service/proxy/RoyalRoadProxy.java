@@ -1,10 +1,8 @@
 package de.bahmut.kindleproxy.service.proxy;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.bahmut.kindleproxy.exception.ProxyException;
@@ -13,11 +11,8 @@ import de.bahmut.kindleproxy.model.BookReference;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.ChapterReference;
 import de.bahmut.kindleproxy.service.CacheService;
-import de.bahmut.kindleproxy.service.ProxyService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -28,10 +23,12 @@ import static de.bahmut.kindleproxy.util.check.ProxyConditions.checkProxyResult;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
-public class RoyalRoadProxy implements ProxyService {
+public class RoyalRoadProxy extends CachedWebProxyService {
 
     private static final String BASE_URL = "https://www.royalroad.com/";
+
+    private static final String URL_BEST_RATED = BASE_URL + "fictions/best-rated";
+    private static final String HTML_SELECTOR_BEST_RATED_LINK = "h2.fiction-title a";
 
     private static final String URL_PATTERN_FAVORITES = BASE_URL + "profile/%s/favorites";
     private static final String HTML_SELECTOR_FAVORITE = "div.portlet-body div.mt-element-overlay";
@@ -46,10 +43,12 @@ public class RoyalRoadProxy implements ProxyService {
     private static final String HTML_SELECTOR_CHAPTER_CONTENT = "div.chapter-inner.chapter-content";
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION = ".btn.btn-primary.col-xs-12";
 
-    private final CacheService cacheService;
-
     @Value("${proxy.royal-road.favorites-user-id}")
     private String favoritesUserIdentifier;
+
+    public RoyalRoadProxy(CacheService cacheService) {
+        super(cacheService);
+    }
 
     @Override
     public String getName() {
@@ -59,24 +58,14 @@ public class RoyalRoadProxy implements ProxyService {
     @Override
     public Chapter getChapter(String bookIdentifier, String chapterIdentifier) throws ProxyException {
         final String chapterUrl = String.format(URL_PATTERN_CHAPTER, bookIdentifier, chapterIdentifier);
-        final Optional<Chapter> cachedChapter = cacheService.getCachedItem(chapterUrl, Chapter.class);
-        if (cachedChapter.isPresent()) {
-            log.debug("Using cached chapter: " + chapterUrl);
-            return cachedChapter.get();
-        }
-        final Document page;
-        try {
-            page = Jsoup.connect(chapterUrl).get();
-        } catch (final IOException e) {
-            throw new ProxyException("Could not retrieve chapter html", e);
-        }
+        final Document page = retrieveDocument(chapterUrl);
         final Elements links = page.select(HTML_SELECTOR_CHAPTER_NAVIGATION);
         final Element linkNext = links.stream().filter(element -> element.text().contains("Next") && element.text().contains("Chapter")).findAny().orElse(null);
         final Element linkPrevious = links.stream().filter(element -> element.text().contains("Previous") && element.text().contains("Chapter")).findAny().orElse(null);
         final Elements chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
         checkProxyResult(chapterContent.size() > 1, "Found more than one chapter");
         checkProxyResult(chapterContent.size() == 0, "Could not find chapter");
-        final Chapter chapter = new Chapter(
+        return new Chapter(
                 chapterIdentifier,
                 bookIdentifier,
                 page.title(),
@@ -84,18 +73,11 @@ public class RoyalRoadProxy implements ProxyService {
                 getIdentifier(linkNext),
                 getIdentifier(linkPrevious)
         );
-        cacheService.addItemToCache(chapterUrl, chapter);
-        return chapter;
     }
 
     @Override
     public Book getBook(String bookIdentifier) throws ProxyException {
-        final Document page;
-        try {
-            page = Jsoup.connect(String.format(URL_PATTERN_BOOK, bookIdentifier)).get();
-        } catch (final IOException e) {
-            throw new ProxyException("Could not retrieve book html", e);
-        }
+        final Document page = retrieveDocument(String.format(URL_PATTERN_BOOK, bookIdentifier));
         final String name = page.select(HTML_SELECTOR_BOOK_TITLE).stream().findAny().map(Element::text).orElse(bookIdentifier);
         final List<ChapterReference> chapters = page.select(HTML_SELECTOR_BOOK_CHAPTERS).stream()
                 .map(this::getChapterReference)
@@ -109,16 +91,14 @@ public class RoyalRoadProxy implements ProxyService {
 
     @Override
     public List<BookReference> getBooks() throws ProxyException {
-        if (StringUtils.isBlank(favoritesUserIdentifier)) {
-            //TODO
-            return List.of();
-        }
         final Document page;
-        try {
-            page = Jsoup.connect(String.format(URL_PATTERN_FAVORITES, favoritesUserIdentifier)).get();
-        } catch (final IOException e) {
-            throw new ProxyException("Could not retrieve favorites html", e);
+        if (StringUtils.isBlank(favoritesUserIdentifier)) {
+            page = retrieveDocument(URL_BEST_RATED);
+            return page.select(HTML_SELECTOR_BEST_RATED_LINK).stream()
+                    .map(this::getBookReference)
+                    .collect(Collectors.toList());
         }
+        page = retrieveDocument(String.format(URL_PATTERN_FAVORITES, favoritesUserIdentifier));
         final Elements favorites = page.select(HTML_SELECTOR_FAVORITE);
         final List<BookReference> books = new LinkedList<>();
         for (final Element favorite : favorites) {
@@ -130,6 +110,13 @@ public class RoyalRoadProxy implements ProxyService {
             books.add(new BookReference(identifier, Objects.requireNonNullElse(title, identifier)));
         }
         return books;
+    }
+
+    private BookReference getBookReference(final Element link) {
+        return new BookReference(
+                getIdentifier(link),
+                link.text().strip()
+        );
     }
 
     private ChapterReference getChapterReference(final Element link) {

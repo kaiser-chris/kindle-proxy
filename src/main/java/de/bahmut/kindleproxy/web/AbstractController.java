@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import de.bahmut.kindleproxy.service.ProxyService;
+import de.bahmut.kindleproxy.service.proxy.ProxyService;
 
 abstract class AbstractController {
 

@@ -1,10 +1,12 @@
-proxy:
-  royal-road:
-    favorites-user-id: ${ROYAL_ROAD_PROFILE:}
-
 spring:
   application:
     name: Kindle Proxy
 
 server:
   port: 80
+
+proxy:
+  calibration:
+    cache-directory: calibration-cache
+  royal-road:
+    favorites-user-id: ${ROYAL_ROAD_PROFILE:}

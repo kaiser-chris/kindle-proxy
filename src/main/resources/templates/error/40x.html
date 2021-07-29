@@ -1,0 +1,10 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head th:replace="fragments/general.html :: headerfiles(title=${title})"></head>
+    <body>
+        <div id="page">
+            <h1 th:text="${title}"></h1>
+            <p th:text="'Reason: ' + ${reason}"></p>
+        </div>
+    </body>
+</html>

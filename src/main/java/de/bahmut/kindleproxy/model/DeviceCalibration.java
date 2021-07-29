@@ -1,10 +1,9 @@
-package de.bahmut.kindleproxy.model.font;
+package de.bahmut.kindleproxy.model;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import de.bahmut.kindleproxy.constant.Device;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,9 @@ public class DeviceCalibration {
 
     private String userAgent;
 
-    private Device device;
+    private int width;
+
+    private int height;
 
     private double defaultRatio;
 

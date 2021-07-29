@@ -1,4 +1,4 @@
-package de.bahmut.kindleproxy.service;
+package de.bahmut.kindleproxy.service.proxy;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;

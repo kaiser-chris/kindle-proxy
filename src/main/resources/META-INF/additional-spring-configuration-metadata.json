@@ -3,6 +3,12 @@
     {
       "name": "proxy.royal-road.favorites",
       "type": "java.lang.String",
-      "description": "Description for proxy.royal-road.favorites."
-  }
-] }
+      "description": "This is the profile identifier of a profile to parse for the Royal Road book list."
+    },
+    {
+      "name": "proxy.calibration.cache-directory",
+      "type": "java.lang.String",
+      "description": "Directory where device calibrations are cached."
+    }
+  ]
+}

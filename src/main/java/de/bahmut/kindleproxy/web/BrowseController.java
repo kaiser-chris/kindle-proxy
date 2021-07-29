@@ -1,27 +1,23 @@
 package de.bahmut.kindleproxy.web;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
 import de.bahmut.kindleproxy.model.BookReference;
 import de.bahmut.kindleproxy.model.ChapterReference;
-import de.bahmut.kindleproxy.service.ProxyService;
+import de.bahmut.kindleproxy.service.proxy.ProxyService;
 import de.bahmut.kindleproxy.util.StreamHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -34,36 +30,44 @@ public class BrowseController extends AbstractController {
     private final List<ProxyService> proxies;
 
     @GetMapping("/")
-    public String home(
-            final Model model
-    ) {
-        model.addAttribute("title", "Proxies");
-        model.addAttribute("list", proxies.stream().collect(Collectors.toMap(ProxyService::getName, reference -> getProxyUrl(reference.getId()))));
-        return "browse";
+    public ModelAndView home() {
+        final var webPage = createBrowseModelAndView();
+        webPage.addObject("title", "Proxies");
+        webPage.addObject("list", proxies.stream().collect(Collectors.toMap(ProxyService::getName, reference -> getProxyUrl(reference.getId()))));
+        return webPage;
     }
 
     @GetMapping("/browse/proxy/{proxyId}/")
-    public String browseProxy(
+    public ModelAndView browseProxy(
             @PathVariable("proxyId") final UUID proxyId,
-            @RequestParam(value = "book", required = false) final String bookId,
-            final Model model
+            @RequestParam(value = "book", required = false) final String bookId
     ) throws ProxyException {
         final Optional<ProxyService> proxy = findProxyService(proxyId, proxies);
         if (proxy.isEmpty()) {
-            model.addAttribute("reason", "Proxy with id " + proxyId + " could not be found");
-            return "error/404";
+            throw new NotFoundException("Proxy with id " + proxyId + " could not be found");
         }
+        final var webPage = createBrowseModelAndView();
         if (bookId != null) {
             final Book book = proxy.get().getBook(bookId);
-            model.addAttribute("title", book.getName());
-            model.addAttribute("list", book.getChapters().stream()
-                    .collect(StreamHelper.toOrderedMap(ChapterReference::getName, reference -> RenderController.getRenderUrl(proxyId, bookId, reference.getIdentifier(), 1))));
-            return "browse";
+            webPage.addObject("title", book.getName());
+            webPage.addObject("list", book.getChapters().stream().collect(StreamHelper.toOrderedMap(
+                            ChapterReference::getName,
+                            reference -> RenderController.getRenderUrl(proxyId, bookId, reference.getIdentifier(), 1)
+            )));
+            return webPage;
         }
-        model.addAttribute("title", "Books");
-        model.addAttribute("list", proxy.get().getBooks().stream()
-                .collect(Collectors.toMap(BookReference::getName, reference -> getBookUrl(proxyId, reference.getIdentifier()))));
-        return "browse";
+        webPage.addObject("title", "Books");
+        webPage.addObject("list", proxy.get().getBooks().stream().collect(StreamHelper.toOrderedMap(
+                BookReference::getName,
+                reference -> getBookUrl(proxyId, reference.getIdentifier())
+        )));
+        return webPage;
+    }
+
+    private ModelAndView createBrowseModelAndView() {
+        final var modelAndView = new ModelAndView();
+        modelAndView.setViewName("browse");
+        return modelAndView;
     }
 
     public static String getProxyUrl(final UUID proxyId) {

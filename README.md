@@ -6,7 +6,7 @@ This application proxies different web novel pages and renders them in a Kindle 
 
  - Royal Road
 
-## Supported Devices
+## Tested Devices
 
  - Kindle Paperwhite 2
 
@@ -16,5 +16,6 @@ Here is a guide to identify which kindle you own: https://www.androidauthority.c
 
  - [Home Icon](/src/main/resources/static/img/home-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [Arrow Left](/src/main/resources/static/img/arrow-left-solid.svg) by [Font Awesome](https://fontawesome.com/license)
-- [Arrow Right](/src/main/resources/static/img/arrow-right-solid.svg) by [Font Awesome](https://fontawesome.com/license)
-- [Sync Icon](/src/main/resources/static/img/sync-solid.svg) by [Font Awesome](https://fontawesome.com/license)
+ - [Arrow Right](/src/main/resources/static/img/arrow-right-solid.svg) by [Font Awesome](https://fontawesome.com/license)
+ - [Sync Icon](/src/main/resources/static/img/sync-solid.svg) by [Font Awesome](https://fontawesome.com/license)
+ - [List Icon](/src/main/resources/static/img/list-solid.svg) by [Font Awesome](https://fontawesome.com/license)
