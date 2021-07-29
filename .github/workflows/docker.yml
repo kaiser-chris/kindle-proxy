@@ -1,0 +1,74 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout tags
+        run: |
+          git fetch --prune --unshallow --tags
+      - name: Get release version
+        id: previous-version
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+
+      - name: Increment release version
+        id: increment-version
+        uses: christian-draeger/increment-semantic-version@1.0.2
+        with:
+          current-version: ${{ steps.previous-version.outputs.tag }}
+          version-fragment: 'bug'
+          
+      - name: Setup Maven 3
+        uses: aahmed-se/setup-maven@v3
+        
+      - name: Set version
+        run: mvn versions:set -DnewVersion=${{ steps.increment-version.outputs.next-version }} -DgenerateBackupPoms=false
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Build docker image
+        run: mvn spring-boot:build-image
+        
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}
+          
+      - name: Docker Metadata action
+        uses: docker/metadata-action@v3.4.1
+        with:
+          images: ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}
+          tags: ghcr.io/kaiser-chris/kindle-proxy:latest
+          
+      - name: Tag-Push Action
+        uses: akhilerm/tag-push-action@v1.1.0
+        with:
+          src: ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}
+          dst: |
+            ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}
+            ghcr.io/kaiser-chris/kindle-proxy:latest
+            
+      - name: Git Commit/Push Changes
+        uses: actions-x/commit@v2
+        with:
+          message: Updated version to ${{ steps.increment-version.outputs.next-version }}
+          
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.2
+        with:
+          repo-token: ${{ secrets.GH_TOKEN }}
+          tag: ${{ steps.increment-version.outputs.next-version }}
