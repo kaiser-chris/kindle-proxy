@@ -100,6 +100,9 @@
 				<configuration>
 					<image>
 						<name>ghcr.io/kaiser-chris/kindle-proxy:${project.version}</name>
+						<env>
+							<BP_OCI_SOURCE>https://github.com/kaiser-chris/kindle-proxy</BP_OCI_SOURCE>
+						</env>
 					</image>
 					<excludes>
 						<exclude>
