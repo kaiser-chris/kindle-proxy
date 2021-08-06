@@ -1,9 +1,17 @@
 package de.bahmut.kindleproxy.service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -103,8 +111,36 @@ public class PageRenderService {
     private int calculateImageHeight(final Document htmlLine) {
         int height = 0;
         final Elements images = htmlLine.getElementsByTag("img");
-        for (final Element image : images) {
-            height += Integer.parseInt(image.attributes().get("height"));
+        for (final Element imageElement : images) {
+            final String heightValue = imageElement.attributes().get("height");
+            if (StringUtils.isNotBlank(heightValue)) {
+                height += Integer.parseInt(heightValue);
+            } else {
+                final String urlValue = imageElement.attributes().get("src");
+                final String widthValue = imageElement.attributes().get("width");
+                if (StringUtils.isBlank(urlValue)) {
+                    continue;
+                }
+                final URL url;
+                try {
+                    url = new URL(urlValue);
+                } catch (final MalformedURLException e) {
+                    log.warn("Could not download embedded image because of an invalid url", e);
+                    continue;
+                }
+                try (final InputStream stream = url.openStream()) {
+                    BufferedImage image = ImageIO.read(stream);
+                    if (StringUtils.isNotBlank(widthValue)) {
+                        final double ratio = Double.parseDouble(widthValue) / (double) image.getWidth();
+                        height += image.getHeight() * ratio;
+                    } else {
+                        height += image.getHeight();
+                    }
+                } catch (final IOException e) {
+                    log.warn("Could not download embedded image", e);
+                    height += FONT_SIZE;
+                }
+            }
         }
         return height;
     }

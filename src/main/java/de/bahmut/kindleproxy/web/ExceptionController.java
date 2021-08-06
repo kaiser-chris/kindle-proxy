@@ -3,16 +3,19 @@ package de.bahmut.kindleproxy.web;
 import de.bahmut.kindleproxy.exception.CalibrationException;
 import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+@Log4j2
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class ExceptionController {
 
     @ExceptionHandler(value = { Throwable.class })
     public ModelAndView handleFallback(final Throwable e) {
+        log.error("Unknown Error", e);
         return createDefaultErrorView(
                 "Unknown Error",
                 e.getMessage(),

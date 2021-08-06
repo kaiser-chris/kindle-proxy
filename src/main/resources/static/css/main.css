@@ -117,7 +117,7 @@ div#page {
 }
 
 div#content {
-    letter-spacing: 0px;
+    letter-spacing: 0;
     box-sizing: border-box;
     height: 100vh;
     overflow: hidden;
@@ -132,6 +132,9 @@ div#content {
     div#content p {
         margin: 0 0 1em 0;
     }
+        div#content p:last-child {
+            margin: 0 0 0 0;
+        }
 
 div.char-test {
     line-height: 1em;
