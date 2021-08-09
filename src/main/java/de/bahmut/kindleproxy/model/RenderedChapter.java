@@ -2,13 +2,12 @@ package de.bahmut.kindleproxy.model;
 
 import java.util.Map;
 
-public record Chapter(
+public record RenderedChapter(
         String identifier,
         String bookIdentifier,
         String title,
-        String body,
-        String nextChapterIdentifier,
-        String previousChapterIdentifier
+        Map<Integer, Page> pages,
+        int maxPage
 ) {
 
 }

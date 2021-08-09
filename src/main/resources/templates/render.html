@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title=${content.getTitle()})" />
+    <head th:replace="fragments/general.html :: headerfiles(title=${title})" />
     <body>
         <div style="visibility: hidden;" id="menu">
             <a id="home" class="button-menu" href="/">
@@ -26,8 +26,8 @@
         </div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
-        <a onclick="prevPage();" class="touch-link" id="left"></a>
-        <a onclick="nextPage();" class="touch-link" id="right"></a>
-        <div id="content" th:utext="${content.getBody()}"/>
+        <a th:if="${page > 1}" onclick="prevPage();" class="touch-link" id="left"></a>
+        <a th:if="${page < maxPage}" onclick="nextPage();" class="touch-link" id="right"></a>
+        <div id="content" th:utext="${content.body()}"></div>
     </body>
 </html>

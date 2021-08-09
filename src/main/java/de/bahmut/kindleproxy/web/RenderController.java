@@ -9,6 +9,7 @@ import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.RenderedChapter;
 import de.bahmut.kindleproxy.service.CalibrationCacheService;
 import de.bahmut.kindleproxy.service.PageRenderService;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
@@ -49,22 +50,27 @@ public class RenderController extends AbstractController {
         if (page <= 0) {
             return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, 1));
         }
-        final Chapter chapter = proxy.get().getChapter(bookId, chapterId);
         final Optional<DeviceCalibration> calibration = calibrationCacheService.findCalibration(agent);
         if (calibration.isEmpty()) {
             return new ModelAndView("redirect:/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8));
         }
-        final Chapter chapterPage = renderService.renderPage(chapter, page, calibration.get());
+        final Chapter chapter = proxy.get().getChapter(bookId, chapterId);
+        final RenderedChapter renderedChapter = renderService.renderChapter(chapter, calibration.get());
+        if (page > renderedChapter.maxPage()) {
+            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, renderedChapter.maxPage()));
+        }
         final var webPage = new ModelAndView();
         webPage.setViewName("render");
         webPage.addObject("proxyId", proxyId);
         webPage.addObject("bookId", encode(bookId, UTF_8));
         webPage.addObject("chapterId", encode(chapterId, UTF_8));
         webPage.addObject("page", page);
-        webPage.addObject("content", chapterPage);
-        webPage.addObject("next", getRenderUrl(proxyId, bookId, chapterPage.getNextChapterIdentifier(), 1));
+        webPage.addObject("maxPage", renderedChapter.maxPage());
+        webPage.addObject("title", renderedChapter.title());
+        webPage.addObject("content", renderedChapter.pages().get(page));
+        webPage.addObject("next", getRenderUrl(proxyId, bookId, chapter.nextChapterIdentifier(), 1));
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
-        webPage.addObject("previous", getRenderUrl(proxyId, bookId, chapterPage.getPreviousChapterIdentifier(), 1));
+        webPage.addObject("previous", getRenderUrl(proxyId, bookId, chapter.previousChapterIdentifier(), 1));
         return webPage;
     }
 

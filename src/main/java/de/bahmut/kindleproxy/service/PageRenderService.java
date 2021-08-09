@@ -6,9 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.Page;
+import de.bahmut.kindleproxy.model.RenderedChapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -25,43 +31,49 @@ public class PageRenderService {
 
     private static final int FONT_SIZE = 24;
 
-    public Chapter renderPage(final Chapter chapter, final int pageNumber, final DeviceCalibration calibration) {
-        return calculatePage(chapter, pageNumber, calibration);
+    private final CacheService cacheService;
+
+    public RenderedChapter renderChapter(final Chapter chapter, final DeviceCalibration calibration) {
+        return renderPages(chapter, calibration);
     }
 
-    private Chapter calculatePage(final Chapter chapter, final int pageNumber, final DeviceCalibration calibration) {
-        final Document page = Jsoup.parse(chapter.getBody());
+    private RenderedChapter renderPages(final Chapter chapter, final DeviceCalibration calibration) {
+        final String cacheIdentifier = String.join(";", chapter.identifier(), chapter.bookIdentifier(), calibration.getIdentifier().toString());
+        final Optional<RenderedChapter> cachedChapter = cacheService.getCachedItem(cacheIdentifier, RenderedChapter.class);
+        if (cachedChapter.isPresent()) {
+            return cachedChapter.get();
+        }
+        final Document page = Jsoup.parse(chapter.body());
         Elements paragraphs = page.getElementsByTag("p");
         if (paragraphs.isEmpty()) {
             paragraphs = page.getElementsByTag("div");
         }
+        final Map<Integer, Page> pages = new HashMap<>();
         final var pageBuilder = new StringBuilder();
         int currentPage = 1;
         int currentPageHeight = calculateBodyPadding();
         for (final Element paragraph : paragraphs) {
-            if (currentPage > pageNumber) {
-                break;
-            }
             final int elementHeight = calculateParagraphHeight(paragraph, calibration);
             if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.getHeight()) {
+                pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
+                pageBuilder.setLength(0);
                 currentPage++;
                 currentPageHeight = calculateBodyPadding();
             }
-            if (currentPage == pageNumber) {
-                pageBuilder
-                        .append(paragraph)
-                        .append("\n");
-            }
+            pageBuilder
+                    .append(paragraph)
+                    .append("\n");
             currentPageHeight += elementHeight;
         }
-        return new Chapter(
-                chapter.getIdentifier(),
-                chapter.getBookIdentifier(),
-                chapter.getTitle(),
-                pageBuilder.toString(),
-                chapter.getNextChapterIdentifier(),
-                chapter.getPreviousChapterIdentifier()
+        final var render = new RenderedChapter(
+                chapter.identifier(),
+                chapter.bookIdentifier(),
+                chapter.title(),
+                pages,
+                pages.keySet().stream().mapToInt(v -> v).max().orElse(1)
         );
+        cacheService.addItemToCache(cacheIdentifier, render, Duration.ofDays(1));
+        return render;
     }
 
     private int calculateBodyPadding() {

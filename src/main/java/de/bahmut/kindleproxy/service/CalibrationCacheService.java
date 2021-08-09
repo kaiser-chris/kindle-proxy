@@ -68,7 +68,7 @@ public class CalibrationCacheService {
             throw new CalibrationException("Could not parse resolution", e);
         }
         final var device = new DeviceCalibration(agent, width, height, defaultRatio, characters);
-        final Path cacheFile = cacheFolder.resolve(UUID.nameUUIDFromBytes(device.getUserAgent().getBytes(StandardCharsets.UTF_8)) + ".json");
+        final Path cacheFile = cacheFolder.resolve(device.getIdentifier() + ".json");
         try {
             Files.writeString(cacheFile, jsonMapper.writeValueAsString(device));
         } catch (final IOException e) {

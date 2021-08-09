@@ -1,8 +1,10 @@
 package de.bahmut.kindleproxy.model;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +29,10 @@ public class DeviceCalibration {
         return Optional.ofNullable(characters.get(character))
                 .map(ratio -> (double) fontSize * ratio)
                 .orElse((double) fontSize * defaultRatio);
+    }
+
+    public UUID getIdentifier() {
+        return UUID.nameUUIDFromBytes(userAgent.getBytes(StandardCharsets.UTF_8));
     }
 
 }
