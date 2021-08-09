@@ -43,7 +43,7 @@ public class PageRenderService {
         if (cachedChapter.isPresent()) {
             return cachedChapter.get();
         }
-        final Document page = Jsoup.parse(chapter.body());
+        final Document page = Jsoup.parse(chapter.htmlBody());
         Elements paragraphs = page.getElementsByTag("p");
         if (paragraphs.isEmpty()) {
             paragraphs = page.getElementsByTag("div");
@@ -84,7 +84,11 @@ public class PageRenderService {
     private int calculateParagraphHeight(final Element paragraph, final DeviceCalibration calibration) {
         final double lineHeight = Math.floor(FONT_SIZE * 1.4);
         final String[] textLines = paragraph.html().split("<br>|<br/>");
-        int elementHeight = FONT_SIZE; // Paragraph padding
+        int elementHeight = 0;
+        if (paragraph.toString().startsWith("<p")) {
+            // Paragraph padding
+            elementHeight += FONT_SIZE;
+        }
         for (String line : textLines) {
             final Document htmlLine = Jsoup.parse(line);
             elementHeight += calculateImageHeight(htmlLine);
