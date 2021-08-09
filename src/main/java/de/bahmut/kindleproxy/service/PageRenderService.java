@@ -31,7 +31,10 @@ public class PageRenderService {
 
     private Chapter calculatePage(final Chapter chapter, final int pageNumber, final DeviceCalibration calibration) {
         final Document page = Jsoup.parse(chapter.getBody());
-        final Elements paragraphs = page.getElementsByTag("p");
+        Elements paragraphs = page.getElementsByTag("p");
+        if (paragraphs.isEmpty()) {
+            paragraphs = page.getElementsByTag("div");
+        }
         final var pageBuilder = new StringBuilder();
         int currentPage = 1;
         int currentPageHeight = calculateBodyPadding();
