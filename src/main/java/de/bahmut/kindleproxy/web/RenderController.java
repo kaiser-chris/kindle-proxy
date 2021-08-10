@@ -47,20 +47,26 @@ public class RenderController extends AbstractController {
         if (proxy.isEmpty()) {
             throw new NotFoundException("Proxy with id " + proxyId + " could not be found");
         }
-        if (page <= 0) {
-            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, 1));
-        }
         final Optional<DeviceCalibration> calibration = calibrationCacheService.findCalibration(agent);
         if (calibration.isEmpty()) {
             return new ModelAndView("redirect:/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8));
         }
         final Chapter chapter = proxy.get().getChapter(bookId, chapterId);
         final RenderedChapter renderedChapter = renderService.renderChapter(chapter, calibration.get());
-        if (page > renderedChapter.maxPage()) {
-            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, renderedChapter.maxPage()));
-        }
+        final String previousChapter = getRenderUrl(proxyId, bookId, chapter.previousChapterIdentifier(), 1);
+        final String nextChapter = getRenderUrl(proxyId, bookId, chapter.nextChapterIdentifier(), 1);
         final var webPage = new ModelAndView();
-        webPage.setViewName("render");
+        if (page == 0 && previousChapter != null) {
+            webPage.setViewName("render/previous-chapter");
+        } else if (page == renderedChapter.maxPage() + 1 && nextChapter != null) {
+            webPage.setViewName("render/next-chapter");
+        } else if (page <= 0 && previousChapter == null) {
+            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, 1));
+        } else if (page > renderedChapter.maxPage() && nextChapter == null) {
+            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, renderedChapter.maxPage()));
+        } else {
+            webPage.setViewName("render/render");
+        }
         webPage.addObject("proxyId", proxyId);
         webPage.addObject("bookId", encode(bookId, UTF_8));
         webPage.addObject("chapterId", encode(chapterId, UTF_8));
@@ -68,9 +74,9 @@ public class RenderController extends AbstractController {
         webPage.addObject("maxPage", renderedChapter.maxPage());
         webPage.addObject("title", renderedChapter.title());
         webPage.addObject("content", renderedChapter.pages().get(page));
-        webPage.addObject("next", getRenderUrl(proxyId, bookId, chapter.nextChapterIdentifier(), 1));
+        webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
-        webPage.addObject("previous", getRenderUrl(proxyId, bookId, chapter.previousChapterIdentifier(), 1));
+        webPage.addObject("previous", previousChapter);
         return webPage;
     }
 

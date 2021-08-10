@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head th:replace="fragments/general.html :: headerfiles(title=${title})">
+        <title>Replaced</title>
+    </head>
+    <body>
+        <div th:replace="fragments/render.html :: menu(book=${book}, previous=${previous}, next=${next}, redirect=${#uris.escapePathSegment('/render/proxy/' + proxyId + '/?book=' + bookId + '&chapter=' + chapterId + '&page=' + page)})" ></div>
+        <a onclick="toggleMenu();" class="touch-link" id="top"></a>
+        <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
+        <a th:href="${previous}" class="touch-link" id="left"></a>
+        <a onclick="nextPage();" class="touch-link" id="right"></a>
+        <div id="chapter-transition">
+            <div id="transition-table">
+                <div>Turn the page again to go to the previous Chapter</div>
+            </div>
+        </div>
+    </body>
+</html>

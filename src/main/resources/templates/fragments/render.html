@@ -1,8 +1,11 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title=${title})" />
+<!--suppress CheckEmptyScriptTag, HtmlRequiredLangAttribute, HtmlUnknownTarget, HtmlRequiredTitleElement -->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Render Fragments</title>
+    </head>
     <body>
-        <div style="visibility: hidden;" id="menu">
+        <div style="visibility: hidden;" id="menu" th:fragment="menu (book, previous, next, redirect)">
             <a id="home" class="button-menu" href="/">
                 <div class="icon"><img alt="Home Icon" src="/img/home-solid.svg"></div>
                 <div class="title"><span>Home</span></div>
@@ -19,15 +22,10 @@
                 <div class="icon"><img alt="Arrow Right Icon" src="/img/arrow-right-solid.svg"></div>
                 <div class="title"><span>Next Chapter</span></div>
             </a>
-            <a id="calibrate" class="button-menu" th:href="'/calibrate/?redirect=' + ${#uris.escapePathSegment('/render/proxy/' + proxyId + '/?book=' + bookId + '&chapter=' + chapterId + '&page=' + page)}">
+            <a id="calibrate" class="button-menu" th:href="'/calibrate/?redirect=' + ${redirect}">
                 <div class="icon"><img alt="Sync Icon" src="/img/sync-solid.svg"></div>
                 <div class="title"><span>Calibrate</span></div>
             </a>
         </div>
-        <a onclick="toggleMenu();" class="touch-link" id="top"></a>
-        <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
-        <a th:if="${page > 1}" onclick="prevPage();" class="touch-link" id="left"></a>
-        <a th:if="${page < maxPage}" onclick="nextPage();" class="touch-link" id="right"></a>
-        <div id="content" th:utext="${content.body()}"></div>
     </body>
 </html>

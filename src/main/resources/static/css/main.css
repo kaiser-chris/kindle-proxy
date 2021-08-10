@@ -136,6 +136,27 @@ div#content {
             margin: 0 0 0 0;
         }
 
+div#chapter-transition {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+    div#transition-table {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    div#transition-table div {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 2em;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
 div.char-test {
     line-height: 1em;
     position: absolute;
