@@ -14,11 +14,11 @@
                 <div class="icon"><img alt="Chapter List Icon" src="/img/list-solid.svg"></div>
                 <div class="title"><span>Chapter List</span></div>
             </a>
-            <a id="previous" class="button-menu" th:href="${previous}">
+            <a id="previous" th:class="(${previous} == null) ? 'button-menu disabled' : 'button-menu'" th:href="${previous}">
                 <div class="icon"><img alt="Arrow Left Icon" src="/img/arrow-left-solid.svg"></div>
                 <div class="title"><span>Previous Chapter</span></div>
             </a>
-            <a id="next" class="button-menu" th:href="${next}">
+            <a id="next" th:class="(${next} == null) ? 'button-menu disabled' : 'button-menu'" th:href="${next}">
                 <div class="icon"><img alt="Arrow Right Icon" src="/img/arrow-right-solid.svg"></div>
                 <div class="title"><span>Next Chapter</span></div>
             </a>

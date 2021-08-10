@@ -93,6 +93,11 @@ div#menu {
         padding: 0.5em 0 0.5em;
         float: left;
     }
+        div#menu a.button-menu.disabled {
+            text-decoration: none;
+            pointer-events: none;
+            opacity: 0.5;
+        }
         div#menu a.button-menu .icon {
             position: relative;
             display: block;
