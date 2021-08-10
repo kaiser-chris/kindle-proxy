@@ -43,17 +43,14 @@ public class PageRenderService {
         if (cachedChapter.isPresent()) {
             return cachedChapter.get();
         }
-        final Document page = Jsoup.parse(chapter.htmlBody());
-        Elements paragraphs = page.getElementsByTag("p");
-        if (paragraphs.isEmpty()) {
-            paragraphs = page.getElementsByTag("div");
-        }
+        final Document page = Jsoup.parseBodyFragment(chapter.htmlBody());
+        final Elements contentElements = page.select("body > *");
         final Map<Integer, Page> pages = new HashMap<>();
         final var pageBuilder = new StringBuilder();
         int currentPage = 1;
         int currentPageHeight = calculateBodyPadding();
-        for (final Element paragraph : paragraphs) {
-            final int elementHeight = calculateParagraphHeight(paragraph, calibration);
+        for (final Element element : contentElements) {
+            final int elementHeight = calculateElementHeight(element, calibration);
             if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.getHeight()) {
                 pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
                 pageBuilder.setLength(0);
@@ -61,7 +58,7 @@ public class PageRenderService {
                 currentPageHeight = calculateBodyPadding();
             }
             pageBuilder
-                    .append(paragraph)
+                    .append(element)
                     .append("\n");
             currentPageHeight += elementHeight;
         }
@@ -79,6 +76,19 @@ public class PageRenderService {
     private int calculateBodyPadding() {
         // 2em on each side
         return 2 * 2 * FONT_SIZE;
+    }
+
+    private int calculateElementHeight(final Element element, final DeviceCalibration calibration) {
+        return switch (element.tag().normalName()) {
+            case "hr" -> FONT_SIZE + 1;
+            case "table" -> calculateTableHeight(element, calibration);
+            default -> calculateParagraphHeight(element, calibration);
+        };
+    }
+
+    private int calculateTableHeight(final Element table, final DeviceCalibration calibration) {
+        //TODO: Implement this
+        return calculateParagraphHeight(table, calibration);
     }
 
     private int calculateParagraphHeight(final Element paragraph, final DeviceCalibration calibration) {
