@@ -74,6 +74,7 @@ public class RenderController extends AbstractController {
         webPage.addObject("maxPage", renderedChapter.maxPage());
         webPage.addObject("title", renderedChapter.title());
         webPage.addObject("content", renderedChapter.pages().get(page));
+        webPage.addObject("calibrate", "/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8));
         webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
         webPage.addObject("previous", previousChapter);
