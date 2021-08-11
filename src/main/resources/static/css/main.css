@@ -125,26 +125,6 @@ div#page {
     padding: 0 2em 2em 2em;
 }
 
-div#content {
-    letter-spacing: 0;
-    box-sizing: border-box;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-    padding: 2em;
-    text-align: justify;
-    font-size: 1em;
-    line-height: 1.4em;
-    word-wrap: break-word;
-    font-family: 'Literata', serif;
-}
-    div#content p {
-        margin: 0 0 1em 0;
-    }
-        div#content p:last-child {
-            margin: 0 0 0 0;
-        }
-
 div#chapter-transition {
     display: table;
     position: absolute;

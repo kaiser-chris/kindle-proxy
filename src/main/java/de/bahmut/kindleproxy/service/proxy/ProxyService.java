@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
-import de.bahmut.kindleproxy.model.BookReference;
+import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.model.Chapter;
 
 public interface ProxyService {
@@ -21,6 +21,6 @@ public interface ProxyService {
 
     Book getBook(final String bookIdentifier) throws ProxyException;
 
-    List<BookReference> getBooks() throws ProxyException;
+    List<Reference> getBooks() throws ProxyException;
 
 }

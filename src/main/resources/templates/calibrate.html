@@ -1,13 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Literata&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <script async="" type="text/javascript" src="/js/calibrate.js"></script>
-    <meta charset="UTF-8">
-    <title>Calibrate Device</title>
+<head th:replace="fragments/general.html :: headerfiles(title='Calibrating Device')">
+    <title>Replaced</title>
 </head>
 <body>
 <a onclick="calibrate();" id="calibrate-js-fail">Calibrate</a>
@@ -69,6 +63,8 @@
     <div class="char-test">?</div>
     <div class="char-test">“</div>
     <div class="char-test">”</div>
+    <div class="char-test">◼</div>
 </div>
+<script async="" type="text/javascript" src="/js/calibrate.js"></script>
 </body>
 </html>

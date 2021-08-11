@@ -7,9 +7,8 @@ import java.util.stream.Collectors;
 
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
-import de.bahmut.kindleproxy.model.BookReference;
+import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.model.Chapter;
-import de.bahmut.kindleproxy.model.ChapterReference;
 import de.bahmut.kindleproxy.service.CacheService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +78,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     public Book getBook(String bookIdentifier) throws ProxyException {
         final Document page = retrieveDocument(String.format(URL_PATTERN_BOOK, bookIdentifier));
         final String name = page.select(HTML_SELECTOR_BOOK_TITLE).stream().findAny().map(Element::text).orElse(bookIdentifier);
-        final List<ChapterReference> chapters = page.select(HTML_SELECTOR_BOOK_CHAPTERS).stream()
+        final List<Reference> chapters = page.select(HTML_SELECTOR_BOOK_CHAPTERS).stream()
                 .map(this::getChapterReference)
                 .collect(Collectors.toList());
         return new Book(
@@ -90,7 +89,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     }
 
     @Override
-    public List<BookReference> getBooks() throws ProxyException {
+    public List<Reference> getBooks() throws ProxyException {
         final Document page;
         if (StringUtils.isBlank(favoritesUserIdentifier)) {
             page = retrieveDocument(URL_BEST_RATED);
@@ -100,27 +99,27 @@ public class RoyalRoadProxy extends CachedWebProxyService {
         }
         page = retrieveDocument(String.format(URL_PATTERN_FAVORITES, favoritesUserIdentifier));
         final Elements favorites = page.select(HTML_SELECTOR_FAVORITE);
-        final List<BookReference> books = new LinkedList<>();
+        final List<Reference> books = new LinkedList<>();
         for (final Element favorite : favorites) {
             final String title = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_TITLE).stream().findAny().map(element -> element.attr("alt")).orElse(null);
             final String identifier = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_LINK).stream().map(this::getIdentifier).findAny().orElse(null);
             if (identifier == null) {
                 continue;
             }
-            books.add(new BookReference(identifier, Objects.requireNonNullElse(title, identifier)));
+            books.add(new Reference(identifier, Objects.requireNonNullElse(title, identifier)));
         }
         return books;
     }
 
-    private BookReference getBookReference(final Element link) {
-        return new BookReference(
+    private Reference getBookReference(final Element link) {
+        return new Reference(
                 getIdentifier(link),
                 link.text().strip()
         );
     }
 
-    private ChapterReference getChapterReference(final Element link) {
-        return new ChapterReference(
+    private Reference getChapterReference(final Element link) {
+        return new Reference(
                 getIdentifier(link),
                 link.text().strip()
         );

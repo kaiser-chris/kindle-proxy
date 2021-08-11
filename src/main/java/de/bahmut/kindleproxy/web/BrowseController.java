@@ -8,8 +8,7 @@ import java.util.stream.Collectors;
 import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
-import de.bahmut.kindleproxy.model.BookReference;
-import de.bahmut.kindleproxy.model.ChapterReference;
+import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
 import de.bahmut.kindleproxy.util.StreamHelper;
 import lombok.RequiredArgsConstructor;
@@ -49,17 +48,17 @@ public class BrowseController extends AbstractController {
         final var webPage = createBrowseModelAndView();
         if (bookId != null) {
             final Book book = proxy.get().getBook(bookId);
-            webPage.addObject("title", book.getName());
-            webPage.addObject("list", book.getChapters().stream().collect(StreamHelper.toOrderedMap(
-                            ChapterReference::getName,
-                            reference -> RenderController.getRenderUrl(proxyId, bookId, reference.getIdentifier(), 1)
+            webPage.addObject("title", book.name());
+            webPage.addObject("list", book.chapters().stream().collect(StreamHelper.toOrderedMap(
+                            Reference::name,
+                            reference -> RenderController.getRenderUrl(proxyId, bookId, reference.identifier(), 1)
             )));
             return webPage;
         }
         webPage.addObject("title", "Books");
         webPage.addObject("list", proxy.get().getBooks().stream().collect(StreamHelper.toOrderedMap(
-                BookReference::getName,
-                reference -> getBookUrl(proxyId, reference.getIdentifier())
+                Reference::name,
+                reference -> getBookUrl(proxyId, reference.identifier())
         )));
         return webPage;
     }

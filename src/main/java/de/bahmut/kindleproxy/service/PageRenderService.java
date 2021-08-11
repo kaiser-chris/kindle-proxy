@@ -51,7 +51,8 @@ public class PageRenderService {
         int currentPageHeight = calculateBodyPadding();
         for (final Element element : contentElements) {
             final int elementHeight = calculateElementHeight(element, calibration);
-            if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.getHeight()) {
+            // Element exceeds page height and is not the first element
+            if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.height() && !(currentPage == 1 && currentPageHeight == calculateBodyPadding())) {
                 pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
                 pageBuilder.setLength(0);
                 currentPage++;
@@ -88,7 +89,7 @@ public class PageRenderService {
 
     private int calculateTableHeight(final Element table, final DeviceCalibration calibration) {
         //TODO: Implement this
-        return calculateParagraphHeight(table, calibration);
+        return calculateParagraphHeight(table, calibration) + FONT_SIZE;
     }
 
     private int calculateParagraphHeight(final Element paragraph, final DeviceCalibration calibration) {
@@ -119,7 +120,7 @@ public class PageRenderService {
         for (final String word : cleanLine.split(" ")) {
             double wordWidth = calculateWordWidth(word, calibration);
             wordWidth = wordWidth * 0.85; //TODO: Hack fix
-            if ((currentLineWidth - (2 * splitWidth) + wordWidth) > calibration.getWidth()) {
+            if ((currentLineWidth - (2 * splitWidth) + wordWidth) > calibration.width()) {
                 currentLine++;
                 currentLineWidth = calculateBodyPadding();
             }

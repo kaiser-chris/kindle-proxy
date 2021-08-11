@@ -1,12 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title='Browse - ' + ${title})" />
+    <head th:replace="fragments/general.html :: headerfiles(title='Browse - ' + ${title})">
+        <title>Replaced</title>
+    </head>
     <body>
         <div id="page">
-            <h1 th:text="'Browse - ' + ${title}" />
+            <h1 th:text="'Browse - ' + ${title}"></h1>
             <ul>
                 <li th:each="link : ${list.entrySet()}">
-                    <a th:href="${link.getValue()}" th:text="${link.getKey()}" />
+                    <a th:href="${link.getValue()}" th:text="${link.getKey()}"></a>
                 </li>
             </ul>
         </div>
