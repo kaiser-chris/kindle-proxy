@@ -13,8 +13,8 @@ public class ProxyConditions {
         throw new ProxyException(message);
     }
 
-    public static void checkProxyResult(final boolean check, final String message, final String... inserts) throws ProxyException {
-        checkProxyResult(check, String.format(message, (Object[]) inserts));
+    public static void checkProxyResult(final boolean check, final String message, final Object... inserts) throws ProxyException {
+        checkProxyResult(check, String.format(message, inserts));
     }
 
 }

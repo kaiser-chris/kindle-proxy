@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import static org.springframework.web.util.UriUtils.encode;
+
 @Log4j2
 @Controller
 @RequiredArgsConstructor
@@ -38,6 +42,16 @@ public class CalibrateController {
             return new ModelAndView("redirect:" + redirect);
         } else {
             return new ModelAndView("redirect:/");
+        }
+    }
+
+    public static String getCalibrationUrl(
+            final String redirectUrl
+    ) {
+        if (redirectUrl == null) {
+            return "/calibrate/";
+        } else {
+            return "/calibrate/?redirect=" + encode(redirectUrl, UTF_8);
         }
     }
 

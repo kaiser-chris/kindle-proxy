@@ -49,7 +49,7 @@ public class RenderController extends AbstractController {
         }
         final Optional<DeviceCalibration> calibration = calibrationCacheService.findCalibration(agent);
         if (calibration.isEmpty()) {
-            return new ModelAndView("redirect:/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8));
+            return new ModelAndView("redirect:" + CalibrateController.getCalibrationUrl(getRenderUrl(proxyId, bookId, chapterId, page)));
         }
         final Chapter chapter = proxy.get().getChapter(bookId, chapterId);
         final RenderedChapter renderedChapter = renderService.renderChapter(chapter, calibration.get());
@@ -74,7 +74,7 @@ public class RenderController extends AbstractController {
         webPage.addObject("maxPage", renderedChapter.maxPage());
         webPage.addObject("title", renderedChapter.title());
         webPage.addObject("content", renderedChapter.pages().get(page));
-        webPage.addObject("calibrate", "/calibrate/?redirect=" + encode(getRenderUrl(proxyId, bookId, chapterId, page), UTF_8));
+        webPage.addObject("calibrate", CalibrateController.getCalibrationUrl(getRenderUrl(proxyId, bookId, chapterId, page)));
         webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
         webPage.addObject("previous", previousChapter);
