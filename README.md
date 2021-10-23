@@ -19,3 +19,4 @@ Here is a guide to identify which kindle you own: https://www.androidauthority.c
  - [Arrow Right](/src/main/resources/static/img/arrow-right-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [Sync Icon](/src/main/resources/static/img/sync-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [List Icon](/src/main/resources/static/img/list-solid.svg) by [Font Awesome](https://fontawesome.com/license)
+ - [Search Icon](/src/main/resources/static/img/search-solid.svg) by [Font Awesome](https://fontawesome.com/license)

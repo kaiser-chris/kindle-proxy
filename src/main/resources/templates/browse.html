@@ -4,11 +4,14 @@
         <title>Replaced</title>
     </head>
     <body>
+        <div th:replace="fragments/general :: menuBrowse (base=${currentUrl}, proxy=${proxy}, book=${book})" ></div>
+        <a onclick="toggleMenu();" class="touch-link" id="top"></a>
+        <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <div id="page">
             <h1 th:text="'Browse - ' + ${title}"></h1>
             <ul>
                 <li th:each="link : ${list.entrySet()}">
-                    <a th:href="${link.getValue()}" th:text="${link.getKey()}"></a>
+                    <a id="list-link" th:href="${link.getValue()}" th:text="${link.getKey()}"></a>
                 </li>
             </ul>
         </div>
