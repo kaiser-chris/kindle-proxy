@@ -95,8 +95,8 @@ public class PageRenderService {
     private int calculateParagraphHeight(final Element paragraph, final DeviceCalibration calibration) {
         final double lineHeight = Math.floor(FONT_SIZE * 1.4);
         final String[] textLines = paragraph.html()
-                .replace("</br>", " <br>")
-                .replace("<br>", " <br>")
+                .replace("</br>", "<br> ")
+                .replace("<br>", "<br> ")
                 .split("<br>");
         int elementHeight = 0;
         if (paragraph.toString().startsWith("<p")) {
