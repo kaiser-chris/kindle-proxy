@@ -5,6 +5,7 @@ This application proxies different web novel pages and renders them in a Kindle 
 ## Supported Pages
 
  - Royal Road
+ - Wuxiaworld
 
 ## Tested Devices
 

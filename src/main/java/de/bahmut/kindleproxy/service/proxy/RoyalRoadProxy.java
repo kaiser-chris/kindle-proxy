@@ -45,7 +45,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     @Value("${proxy.royal-road.favorites-user-id}")
     private String favoritesUserIdentifier;
 
-    public RoyalRoadProxy(CacheService cacheService) {
+    public RoyalRoadProxy(final CacheService cacheService) {
         super(cacheService);
     }
 
