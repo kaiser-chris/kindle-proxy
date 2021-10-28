@@ -63,6 +63,9 @@ public class PageRenderService {
                     .append("\n");
             currentPageHeight += elementHeight;
         }
+        if (!pageBuilder.isEmpty()) {
+            pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
+        }
         final var render = new RenderedChapter(
                 chapter.identifier(),
                 chapter.bookIdentifier(),
