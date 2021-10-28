@@ -6,12 +6,12 @@ import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.service.CacheService;
 import lombok.extern.log4j.Log4j2;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,8 +32,6 @@ import static de.bahmut.kindleproxy.util.check.ProxyConditions.checkProxyResult;
 @Service
 public class WuxiaworldProxy extends CachedWebProxyService {
 
-    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
-
     private static final String BASE_URL = "https://www.wuxiaworld.com/";
 
     private static final String URL_API_BOOK_LIST = BASE_URL + "api/novels/search";
@@ -49,8 +47,14 @@ public class WuxiaworldProxy extends CachedWebProxyService {
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION_NEXT = "div.top-bar-area li.next a.btn.btn-link:not(.disabled)";
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION_PREVIOUS = "div.top-bar-area li.prev a.btn.btn-link:not(.disabled)";
 
-    public WuxiaworldProxy(final CacheService cacheService) {
+    private final RestTemplate restTemplate;
+
+    public WuxiaworldProxy(
+            final CacheService cacheService,
+            final RestTemplate restTemplate
+    ) {
         super(cacheService);
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -105,7 +109,7 @@ public class WuxiaworldProxy extends CachedWebProxyService {
         final URI apiUrl;
         try {
             apiUrl = new URI(URL_API_BOOK_LIST);
-            final ResponseEntity<String> result = REST_TEMPLATE.exchange(apiUrl, HttpMethod.POST, new HttpEntity<>(API_BOOK_LIST_PAYLOAD, headers), String.class);
+            final ResponseEntity<String> result = restTemplate.exchange(apiUrl, HttpMethod.POST, new HttpEntity<>(API_BOOK_LIST_PAYLOAD, headers), String.class);
             JSONObject jsonResult = new JSONObject(result.getBody());
             final JSONArray jsonBooks = jsonResult.getJSONArray("items");
             for (int i = 0; i < jsonBooks.length(); i++) {
