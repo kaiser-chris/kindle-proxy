@@ -50,6 +50,10 @@ public class PageRenderService {
         int currentPage = 1;
         int currentPageHeight = calculateBodyPadding();
         for (final Element element : contentElements) {
+            if (element.tag().normalName().equals("script")) {
+                //TODO: Improve and harden this check
+                continue;
+            }
             final int elementHeight = calculateElementHeight(element, calibration);
             // Element exceeds page height and is not the first element
             if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.height() && !(currentPage == 1 && currentPageHeight == calculateBodyPadding())) {

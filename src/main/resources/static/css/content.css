@@ -10,6 +10,7 @@ div#content {
     line-height: 1.4em;
     word-wrap: break-word;
     font-family: 'Literata', serif;
+    color: #000000 !important;
 }
 
 div#content p {
