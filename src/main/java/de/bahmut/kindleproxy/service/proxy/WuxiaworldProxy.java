@@ -114,9 +114,8 @@ public class WuxiaworldProxy extends CachedWebProxyService {
         final MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add("accept", "application/json");
         headers.add("content-type", "application/json;charset=UTF-8");
-        final URI apiUrl;
         try {
-            apiUrl = new URI(URL_API_BOOK_LIST);
+            final URI apiUrl = new URI(URL_API_BOOK_LIST);
             final ResponseEntity<String> result = restTemplate.exchange(apiUrl, HttpMethod.POST, new HttpEntity<>(API_BOOK_LIST_PAYLOAD, headers), String.class);
             JSONObject jsonResult = new JSONObject(result.getBody());
             final JSONArray jsonBooks = jsonResult.getJSONArray("items");
@@ -127,7 +126,7 @@ public class WuxiaworldProxy extends CachedWebProxyService {
                         jsonBook.getString("name")
                 ));
             }
-        } catch (final URISyntaxException | JSONException e) {
+        } catch (final Exception e) {
             throw new ProxyException("Could not parse Wuxiaworld book list", e);
         }
         return books;

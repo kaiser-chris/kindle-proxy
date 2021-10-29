@@ -29,5 +29,4 @@ public abstract class CachedWebProxyService implements ProxyService {
         return page;
     }
 
-
 }

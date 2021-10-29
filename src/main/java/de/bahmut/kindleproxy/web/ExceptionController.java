@@ -25,6 +25,7 @@ public class ExceptionController {
 
     @ExceptionHandler(value = { CalibrationException.class })
     public ModelAndView handleCalibrationException(final CalibrationException e) {
+        log.error("Calibration Error", e);
         return createDefaultErrorView(
                 "Calibration Error",
                 e.getMessage(),
@@ -34,6 +35,7 @@ public class ExceptionController {
 
     @ExceptionHandler(value = { ProxyException.class })
     public ModelAndView handleCalibrationException(final ProxyException e) {
+        log.warn("Proxy Error", e);
         return createDefaultErrorView(
                 "Proxy Error",
                 e.getMessage(),
@@ -43,6 +45,7 @@ public class ExceptionController {
 
     @ExceptionHandler(value = { NotFoundException.class })
     public ModelAndView handleNotFoundException(final NotFoundException e) {
+        log.debug("Page not found", e);
         return createDefaultErrorView(
                 "Page not found",
                 e.getMessage(),
