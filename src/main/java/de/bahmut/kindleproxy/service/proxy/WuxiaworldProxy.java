@@ -44,6 +44,7 @@ public class WuxiaworldProxy extends CachedWebProxyService {
     private static final String URL_PATTERN_CHAPTER = BASE_URL + "novel/%s/%s";
     private static final String HTML_SELECTOR_CHAPTER_TITLE = "div#chapter-outer h4";
     private static final String HTML_SELECTOR_CHAPTER_CONTENT = "div#chapter-content";
+    private static final String HTML_SELECTOR_CHAPTER_CONTENT_INNER = "div#chapterContent";
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION_NEXT = "div.top-bar-area li.next a.btn.btn-link:not(.disabled)";
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION_PREVIOUS = "div.top-bar-area li.prev a.btn.btn-link:not(.disabled)";
 
@@ -71,9 +72,16 @@ public class WuxiaworldProxy extends CachedWebProxyService {
         final Elements title = page.select(HTML_SELECTOR_CHAPTER_TITLE);
         checkProxyResult(title.size() > 1, "Found more than one chapter title");
         checkProxyResult(title.size() == 0, "Could not find chapter title");
-        final Elements chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
-        checkProxyResult(chapterContent.size() > 1, "Found more than one chapter title");
-        checkProxyResult(chapterContent.size() == 0, "Could not find chapter title");
+        final Elements chapterContentInner = page.select(HTML_SELECTOR_CHAPTER_CONTENT_INNER);
+        checkProxyResult(chapterContentInner.size() > 1, "Found more than one chapter");
+        final Elements chapterContent;
+        if (chapterContentInner.isEmpty()) {
+            chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
+            checkProxyResult(chapterContent.size() > 1, "Found more than one chapter");
+            checkProxyResult(chapterContent.size() == 0, "Could not find chapter");
+        } else {
+            chapterContent = chapterContentInner;
+        }
         return new Chapter(
                 chapterIdentifier,
                 bookIdentifier,
