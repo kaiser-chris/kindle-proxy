@@ -71,8 +71,22 @@ jobs:
         with:
           message: Updated version to ${{ steps.increment-version.outputs.next-version }}
           
-      - name: Tag commit
+      - name: Tag Commit
         uses: tvdias/github-tagger@v0.0.2
         with:
           repo-token: ${{ secrets.GH_TOKEN }}
           tag: ${{ steps.increment-version.outputs.next-version }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ steps.increment-version.outputs.next-version }}
+          release_name: Release ${{ steps.increment-version.outputs.next-version }}
+          body: |
+            Released new docker image:
+            ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}
+          draft: false
+          prerelease: false
