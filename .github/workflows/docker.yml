@@ -84,9 +84,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ steps.increment-version.outputs.next-version }}
-          release_name: Release ${{ steps.increment-version.outputs.next-version }}
+          release_name: ${{ steps.increment-version.outputs.next-version }}
           body: |
-            Released new docker image:
-            ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}
+            Released a new docker image:
+             - [ghcr.io/kaiser-chris/kindle-proxy:${{ steps.increment-version.outputs.next-version }}](https://github.com/kaiser-chris/kindle-proxy/pkgs/container/kindle-proxy/)
           draft: false
           prerelease: false
