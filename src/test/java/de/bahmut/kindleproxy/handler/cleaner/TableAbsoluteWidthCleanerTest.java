@@ -43,7 +43,7 @@ class TableAbsoluteWidthCleanerTest {
         testHtml = Jsoup.parse(TEST_HTML);
     }
 
-    @DisplayName("Verify that html is cleaned properly and percentage values are not cleaned")
+    @DisplayName("Verify that absolute values in table width attributes are removed properly and percentage values are not removed")
     @Test
     void testCleaner() {
         final Document cleaned = cleaner.clean(testHtml);
