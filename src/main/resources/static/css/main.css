@@ -32,7 +32,7 @@ body {
 }
     .touch-link#top {
         position: fixed !important;
-        height: 5rem;
+        height: 120px;
         width: 100%;
         left: 0;
         top: 0;
@@ -79,8 +79,7 @@ body {
 div#menu {
     position: fixed;
     display: block;
-    height: 5em;
-    height: calc(4.9em + 2px);
+    height: 120px;
     width: 100%;
     top: 0;
     left: 0;
@@ -93,11 +92,11 @@ div#menu {
         position: relative;
         display: block;
         outline: none;
-        height: 3.9em;
+        height: 94px;
         width: 20%;
         color: #000000;
         text-decoration: none;
-        padding: 0.5em 0 0.5em;
+        padding: 12px 0 12px;
         float: left;
     }
         div#menu a.button-menu.disabled {
@@ -109,28 +108,28 @@ div#menu {
             position: relative;
             display: block;
             width: 100%;
-            height: 2rem;
+            height: 48px;
             text-align: center;
             vertical-align: middle;
-            padding-bottom: 0.5rem;
+            padding-bottom: 12px;
         }
             div#menu .icon img {
-                height: 2rem;
+                height: 48px;
             }
         div#menu .title {
             position: relative;
             display: block;
             width: 100%;
-            height: 1.4rem;
-            font-size: 0.7rem;
-            line-height: 1.4rem;
+            height: 34px;
+            font-size: 17px;
+            line-height: 34px;
             text-align: center;
             vertical-align: middle;
         }
     div#menu form#search {
         display: block;
         outline: none;
-        height: 4.9em;
+        height: 118px;
         width: 60%;
         color: #000000;
         text-decoration: none;
@@ -140,17 +139,17 @@ div#menu {
             position: relative;
             display: block;
             outline: none;
-            height: 3.9em;
+            height: 94px;
             width: 67%;
             color: #000000;
             text-decoration: none;
-            padding: 0.5em 0 0.5em;
+            padding: 12px 0 12px;
             float: left;
             text-align: center;
         }
             div#menu form#search input {
-                font-size: 1.5rem;
-                margin: 1rem;
+                font-size: 36px;
+                margin: 24px;
                 width: 90%;
                 border: 1px solid #000000;
                 border-radius: 5px;
@@ -159,10 +158,10 @@ div#menu {
             border: 0;
             background-color: #FFFFFF;
             width: 33%;
-            height: 4.9rem;
+            height: 118px;
             color: #000000;
             text-decoration: none;
-            padding: 0.5rem 0 0.5rem 0;
+            padding: 12px 0 12px 0;
             cursor: pointer;
         }
 
