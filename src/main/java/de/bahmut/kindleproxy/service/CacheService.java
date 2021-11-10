@@ -18,15 +18,16 @@ public class CacheService {
     private static final Map<String, CachedItem<?>> CACHE = new ConcurrentHashMap<>();
 
     public <T> Optional<T> getCachedItem(
-            final String identifier,
+            final String objectIdentifier,
+            final String conditionIdentifier,
             final Class<T> targetClass
     ) {
-        final CachedItem<?> item = CACHE.get(identifier);
+        final CachedItem<?> item = CACHE.get(objectIdentifier + conditionIdentifier);
         if (item == null) {
             return Optional.empty();
         }
         if (item.timeToLive().isBefore(LocalDateTime.now())) {
-            CACHE.remove(identifier);
+            CACHE.remove(objectIdentifier + conditionIdentifier);
             return Optional.empty();
         }
         if (!targetClass.isInstance(item.value())) {
@@ -35,19 +36,39 @@ public class CacheService {
         return Optional.of(targetClass.cast(item.value()));
     }
 
-    public <T> void addItemToCache(
-            final String identifier,
-            final T value,
-            final Duration timeToLive
+    public <T> Optional<T> getCachedItem(
+            final String objectIdentifier,
+            final Class<T> targetClass
     ) {
-        CACHE.put(identifier, new CachedItem<>(identifier, value, LocalDateTime.now().plus(timeToLive)));
+        return getCachedItem(objectIdentifier, "", targetClass);
     }
 
     public <T> void addItemToCache(
             final String identifier,
+            final String conditionIdentifier,
+            final T value,
+            final Duration timeToLive
+    ) {
+        CACHE.put(identifier + conditionIdentifier, new CachedItem<>(identifier + conditionIdentifier, value, LocalDateTime.now().plus(timeToLive)));
+    }
+
+    public <T> void addItemToCache(
+            final String objectIdentifier,
+            final String conditionIdentifier,
             final T value
     ) {
-        addItemToCache(identifier, value, DEFAULT_TIME_TO_LIVE);
+        addItemToCache(objectIdentifier, conditionIdentifier, value, DEFAULT_TIME_TO_LIVE);
+    }
+
+    public <T> void addItemToCache(
+            final String objectIdentifier,
+            final T value
+    ) {
+        addItemToCache(objectIdentifier, "", value);
+    }
+
+    public void invalidItemsByConditionIdentifier(final String conditionIdentifier) {
+        CACHE.keySet().stream().filter(key -> key.endsWith(conditionIdentifier)).forEach(CACHE::remove);
     }
 
 }

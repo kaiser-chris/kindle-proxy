@@ -38,7 +38,7 @@ public class CalibrationCacheService {
         }
     }
 
-    public void cacheCalibration(final String agent, final Map<String, String> queryParameters) throws CalibrationException {
+    public DeviceCalibration cacheCalibration(final String agent, final Map<String, String> queryParameters) throws CalibrationException {
         final Map<Character, Double> characters = new HashMap<>();
         for (final Map.Entry<String, String> entry : queryParameters.entrySet()) {
             if (entry.getKey().length() != 1) {
@@ -74,6 +74,7 @@ public class CalibrationCacheService {
         } catch (final IOException e) {
             throw new CalibrationException("Could not cache calibration", e);
         }
+        return device;
     }
 
     public Optional<DeviceCalibration> findCalibration(final String agent) throws IOException {

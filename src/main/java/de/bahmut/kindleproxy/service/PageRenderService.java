@@ -35,8 +35,8 @@ public class PageRenderService {
     private final ParagraphElementCalculator paragraphElementCalculator;
 
     public RenderedChapter renderChapter(final Chapter chapter, final DeviceCalibration calibration) {
-        final String cacheIdentifier = String.join(";", chapter.identifier(), chapter.bookIdentifier(), calibration.getIdentifier().toString());
-        final Optional<RenderedChapter> cachedChapter = cacheService.getCachedItem(cacheIdentifier, RenderedChapter.class);
+        final String cacheIdentifier = String.join(";", chapter.identifier(), chapter.bookIdentifier());
+        final Optional<RenderedChapter> cachedChapter = cacheService.getCachedItem(cacheIdentifier, calibration.getIdentifier().toString(), RenderedChapter.class);
         if (cachedChapter.isPresent()) {
             return cachedChapter.get();
         }
@@ -50,7 +50,7 @@ public class PageRenderService {
                 pages,
                 pages.keySet().stream().mapToInt(v -> v).max().orElse(1)
         );
-        cacheService.addItemToCache(cacheIdentifier, render, Duration.ofDays(1));
+        cacheService.addItemToCache(cacheIdentifier, calibration.getIdentifier().toString(), render, Duration.ofDays(1));
         return render;
     }
 
@@ -69,22 +69,30 @@ public class PageRenderService {
         int currentPageHeight = BODY_PADDING;
         for (final Element element : contentElements) {
             final int elementHeight = calculateElementHeight(element, calibration);
-            // Element exceeds page height and is not the first element
-            if ((currentPageHeight + elementHeight - FONT_SIZE) > calibration.height() && !(currentPage == 1 && currentPageHeight == BODY_PADDING)) {
+            if (
+                    exceedsPageSize(elementHeight, currentPageHeight, calibration.height()) &&
+                    !isFirstElement(currentPage, currentPageHeight)
+            ) {
                 pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
                 pageBuilder.setLength(0);
                 currentPage++;
                 currentPageHeight = BODY_PADDING;
             }
-            pageBuilder
-                    .append(element)
-                    .append("\n");
+            pageBuilder.append(element).append("\n");
             currentPageHeight += elementHeight;
         }
         if (!pageBuilder.isEmpty()) {
             pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
         }
         return pages;
+    }
+
+    private boolean isFirstElement(final int pageNumber, final int pageHeight) {
+        return pageNumber == 1 && pageHeight == BODY_PADDING;
+    }
+
+    private boolean exceedsPageSize(final int elementHeight, final int pageHeight, final int maxPageHeight) {
+        return (pageHeight + elementHeight - FONT_SIZE) > maxPageHeight;
     }
 
     private int calculateElementHeight(final Element element, final DeviceCalibration calibration) {

@@ -3,6 +3,8 @@ package de.bahmut.kindleproxy.web;
 import java.util.Map;
 
 import de.bahmut.kindleproxy.exception.CalibrationException;
+import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.service.CacheService;
 import de.bahmut.kindleproxy.service.CalibrationCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +24,7 @@ import static org.springframework.web.util.UriUtils.encode;
 public class CalibrateController {
 
     private final CalibrationCacheService calibrationCacheService;
+    private final CacheService cacheService;
 
     @GetMapping("/calibrate/")
     public ModelAndView calibrate(
@@ -33,7 +36,8 @@ public class CalibrateController {
             return new ModelAndView("calibrate");
         }
         try {
-            calibrationCacheService.cacheCalibration(agent, allRequestParams);
+            final DeviceCalibration calibration = calibrationCacheService.cacheCalibration(agent, allRequestParams);
+            cacheService.invalidItemsByConditionIdentifier(calibration.getIdentifier().toString());
         } catch (final CalibrationException e) {
             log.warn("Invalid calibration", e);
             return new ModelAndView("calibrate");
