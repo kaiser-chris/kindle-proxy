@@ -1,5 +1,7 @@
 package de.bahmut.kindleproxy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +21,7 @@ public record DeviceCalibration(
                 .orElse((double) fontSize * defaultRatio);
     }
 
+    @JsonIgnore
     public UUID getIdentifier() {
         return UUID.nameUUIDFromBytes(userAgent.getBytes(StandardCharsets.UTF_8));
     }
