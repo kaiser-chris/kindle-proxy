@@ -11,7 +11,7 @@
             <h1 th:text="'Browse - ' + ${title}"></h1>
             <ul>
                 <li th:each="link : ${list.entrySet()}">
-                    <a id="list-link" th:href="${link.getValue()}" th:text="${link.getKey()}"></a>
+                    <a id="list-link" th:href="${link.getKey()}" th:text="${link.getValue()}"></a>
                 </li>
             </ul>
         </div>

@@ -38,7 +38,7 @@ public class BrowseController extends AbstractController {
         webPage.addObject("currentUrl", "/");
         webPage.addObject("list", proxies.stream()
                 .filter(proxy -> isSearched(search, proxy.getName()))
-                .collect(Collectors.toMap(ProxyService::getName, reference -> getProxyUrl(reference.getId()))));
+                .collect(Collectors.toMap(reference -> getProxyUrl(reference.getId()), ProxyService::getName)));
         return webPage;
     }
 
@@ -62,8 +62,8 @@ public class BrowseController extends AbstractController {
             webPage.addObject("list", book.chapters().stream()
                             .filter(reference -> isSearched(search, reference.name()))
                             .collect(StreamHelper.toOrderedMap(
-                                    Reference::name,
-                                    reference -> RenderController.getRenderUrl(proxyId, bookId, reference.identifier(), 1)
+                                    reference -> RenderController.getRenderUrl(proxyId, bookId, reference.identifier(), 1),
+                                    Reference::name
                             )));
             return webPage;
         }
@@ -73,8 +73,8 @@ public class BrowseController extends AbstractController {
         webPage.addObject("list", proxy.get().getBooks().stream()
                 .filter(reference -> isSearched(search, reference.name()))
                 .collect(StreamHelper.toOrderedMap(
-                        Reference::name,
-                        reference -> getBookUrl(proxyId, reference.identifier())
+                        reference -> getBookUrl(proxyId, reference.identifier()),
+                        Reference::name
                 )));
         return webPage;
     }
