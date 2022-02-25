@@ -1,0 +1,34 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.gitignore'
+      - '**/*.css'
+      - '**/*.html'
+      - '**/*.svg'
+      - '**/*.yml'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+        cache: maven
+        
+    - name: Build with Maven
+      run: mvn -B verify --file pom.xml
