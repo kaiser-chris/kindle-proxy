@@ -3,6 +3,10 @@ name: Docker Build
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '.github/**'
+      - '**/*.gitignore'
+      - '**/*.md'
 
 jobs:
   docker-build:

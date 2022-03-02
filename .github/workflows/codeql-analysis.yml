@@ -44,12 +44,10 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
+        cache: maven
 
-    - name: Setup Maven
-      uses: stCarolas/setup-maven@v4.1
-
-    - name: Build and Test
-      run: mvn clean verify
+    - name: Build with Maven
+      run: mvn -B verify --file pom.xml
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
