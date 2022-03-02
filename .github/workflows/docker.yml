@@ -1,6 +1,7 @@
 name: Docker Build
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths-ignore:
@@ -19,16 +20,16 @@ jobs:
       - name: Checkout tags
         run: |
           git fetch --prune --unshallow --tags
-          
-      - name: Get release version
-        id: previous-version
-        uses: WyriHaximus/github-action-get-previous-tag@v1
+
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        id: project
 
       - name: Increment release version
         id: increment-version
         uses: christian-draeger/increment-semantic-version@1.0.2
         with:
-          current-version: ${{ steps.previous-version.outputs.tag }}
+          current-version: ${{ steps.project.outputs.version }}
           version-fragment: 'bug'
           
       - name: Setup Java
@@ -36,9 +37,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-        
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@v4.1
+          cache: maven
         
       - name: Set version
         run: >
