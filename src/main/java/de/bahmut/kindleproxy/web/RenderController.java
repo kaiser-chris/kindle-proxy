@@ -1,24 +1,23 @@
 package de.bahmut.kindleproxy.web;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import de.bahmut.kindleproxy.exception.CalibrationException;
 import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.model.RenderedChapter;
-import de.bahmut.kindleproxy.service.CalibrationCacheService;
 import de.bahmut.kindleproxy.service.PageRenderService;
+import de.bahmut.kindleproxy.service.UserSettingsService;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,23 +30,22 @@ import static org.springframework.web.util.UriUtils.encode;
 @RequiredArgsConstructor
 public class RenderController extends AbstractController {
 
+    private final UserSettingsService settingsService;
     private final List<ProxyService> proxies;
     private final PageRenderService renderService;
-    private final CalibrationCacheService calibrationCacheService;
 
     @GetMapping("/render/proxy/{proxyId}/")
     public ModelAndView render(
             @PathVariable("proxyId") final UUID proxyId,
             @RequestParam("book") final String bookId,
             @RequestParam("chapter") final String chapterId,
-            @RequestParam(value = "page", required = false, defaultValue = "1") final int page,
-            @RequestHeader("User-Agent") final String agent
-    ) throws ProxyException, IOException {
+            @RequestParam(value = "page", required = false, defaultValue = "1") final int page
+    ) throws ProxyException, CalibrationException {
         final Optional<ProxyService> proxy = findProxyService(proxyId, proxies);
         if (proxy.isEmpty()) {
             throw new NotFoundException("Proxy with id " + proxyId + " could not be found");
         }
-        final Optional<DeviceCalibration> calibration = calibrationCacheService.findCalibration(agent);
+        final Optional<DeviceCalibration> calibration = settingsService.getCalibration();
         if (calibration.isEmpty()) {
             return new ModelAndView("redirect:" + CalibrateController.getCalibrationUrl(getRenderUrl(proxyId, bookId, chapterId, page)));
         }

@@ -29,6 +29,8 @@ import static de.bahmut.kindleproxy.constant.CalculationConstants.FONT_SIZE;
 @RequiredArgsConstructor
 public class PageRenderService {
 
+    private final UserSettingsService settingsService;
+
     private final CacheService cacheService;
     private final List<ContentCleaner> contentCleaners;
     private final List<ElementCalculator> elementCalculators;
@@ -36,7 +38,7 @@ public class PageRenderService {
 
     public RenderedChapter renderChapter(final Chapter chapter, final DeviceCalibration calibration) {
         final String cacheIdentifier = String.join(";", chapter.identifier(), chapter.bookIdentifier());
-        final Optional<RenderedChapter> cachedChapter = cacheService.getCachedItem(cacheIdentifier, calibration.getIdentifier().toString(), RenderedChapter.class);
+        final Optional<RenderedChapter> cachedChapter = cacheService.getCachedItem(cacheIdentifier, settingsService.getUserIdentifier().toString(), RenderedChapter.class);
         if (cachedChapter.isPresent()) {
             return cachedChapter.get();
         }
@@ -50,7 +52,7 @@ public class PageRenderService {
                 pages,
                 pages.keySet().stream().mapToInt(v -> v).max().orElse(1)
         );
-        cacheService.addItemToCache(cacheIdentifier, calibration.getIdentifier().toString(), render, Duration.ofDays(1));
+        cacheService.addItemToCache(cacheIdentifier, settingsService.getUserIdentifier().toString(), render, Duration.ofDays(1));
         return render;
     }
 

@@ -18,15 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalibrationCacheService {
 
-    private static final double DEFAULT_RATIO = 0.9;
-
     private final ObjectMapper jsonMapper;
     private final Path cacheFolder;
+    private final CacheService cacheService;
 
     public CalibrationCacheService(
             final ObjectMapper jsonMapper,
+            final CacheService cacheService,
             @Value("${proxy.calibration.cache-directory}") final Path cacheFolder
     ) throws CalibrationException {
+        this.cacheService = cacheService;
         this.jsonMapper = jsonMapper;
         this.cacheFolder = cacheFolder;
         if (Files.notExists(cacheFolder)) {
@@ -38,51 +39,29 @@ public class CalibrationCacheService {
         }
     }
 
-    public DeviceCalibration cacheCalibration(final String agent, final Map<String, String> queryParameters) throws CalibrationException {
-        final Map<Character, Double> characters = new HashMap<>();
-        for (final Map.Entry<String, String> entry : queryParameters.entrySet()) {
-            if (entry.getKey().length() != 1) {
-                continue;
-            }
-            final char character = entry.getKey().charAt(0);
-            final double ratio;
-            try {
-                ratio = Double.parseDouble(entry.getValue());
-            } catch(final NumberFormatException e) {
-                throw new CalibrationException("Could not parse character ratio for char " + character, e);
-            }
-            characters.put(character, ratio);
-        }
-        final double defaultRatio;
-        if (characters.get('M') != null) {
-            defaultRatio = characters.get('M');
-        } else {
-            defaultRatio = DEFAULT_RATIO;
-        }
-        final int width;
-        final int height;
+    public void cacheCalibration(
+            final UUID userIdentifier,
+            final DeviceCalibration calibration
+    ) throws CalibrationException {
+        final Path cacheFile = cacheFolder.resolve(userIdentifier + ".json");
         try {
-            width = Integer.parseInt(queryParameters.get("width"));
-            height = Integer.parseInt(queryParameters.get("height"));
-        } catch(final NumberFormatException e) {
-            throw new CalibrationException("Could not parse resolution", e);
-        }
-        final var device = new DeviceCalibration(agent, width, height, defaultRatio, characters);
-        final Path cacheFile = cacheFolder.resolve(device.getIdentifier() + ".json");
-        try {
-            Files.writeString(cacheFile, jsonMapper.writeValueAsString(device));
+            Files.writeString(cacheFile, jsonMapper.writeValueAsString(calibration));
         } catch (final IOException e) {
             throw new CalibrationException("Could not cache calibration", e);
         }
-        return device;
+        cacheService.invalidItemsByConditionIdentifier(userIdentifier.toString());
     }
 
-    public Optional<DeviceCalibration> findCalibration(final String agent) throws IOException {
-        final Path cacheFile = cacheFolder.resolve(UUID.nameUUIDFromBytes(agent.getBytes(StandardCharsets.UTF_8)) + ".json");
+    public Optional<DeviceCalibration> findCalibration(final UUID userIdentifier) throws CalibrationException {
+        final Path cacheFile = cacheFolder.resolve(userIdentifier + ".json");
         if (Files.notExists(cacheFile)) {
             return Optional.empty();
         }
-        return Optional.of(jsonMapper.readValue(Files.readAllBytes(cacheFile), DeviceCalibration.class));
+        try {
+            return Optional.of(jsonMapper.readValue(Files.readAllBytes(cacheFile), DeviceCalibration.class));
+        } catch (IOException e) {
+            throw new CalibrationException("Could not read calibration from disk", e);
+        }
     }
 
 }
