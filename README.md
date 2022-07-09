@@ -5,7 +5,6 @@ This application proxies different web novel pages and renders them in a Kindle 
 ## Supported Pages
 
  - Royal Road
- - Wuxiaworld
 
 ## Tested Devices
 
@@ -22,9 +21,9 @@ Images are currently published to the GitHub package registry.
 
 These variables can be set to configure your setup.
 
-Variable | Description
--------- | -----------
-ROYAL_ROAD_PROFILE | Set this to your Royal Road public profile id (can be found in the url) to show only your favorite items in the book overview. When it is left blank only the 'Best Rated' books are listed since Royal Road has too much content to list everything.
+| Variable           | Description                                                                                                                                                                                                                                           |
+|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ROYAL_ROAD_PROFILE | Set this to your Royal Road public profile id (can be found in the url) to show only your favorite items in the book overview. When it is left blank only the 'Best Rated' books are listed since Royal Road has too much content to list everything. |
 
 ## Examples
 
