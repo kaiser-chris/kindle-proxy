@@ -1,6 +1,7 @@
 package de.bahmut.kindleproxy.handler.element;
 
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.UserSettings;
 import org.jsoup.nodes.Element;
 
 /**
@@ -11,6 +12,10 @@ public interface ElementCalculator {
 
     boolean isTagSupported(final String tag);
 
-    int calculateElementHeight(final Element element, final DeviceCalibration calibration);
+    int calculateElementHeight(
+            final Element element,
+            final DeviceCalibration calibration,
+            final UserSettings settings
+    );
 
 }

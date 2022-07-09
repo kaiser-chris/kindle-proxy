@@ -28,7 +28,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
-public class RenderController extends AbstractController {
+public class RenderController implements ProxyBasedController, RenderingController {
 
     private final UserSettingsService settingsService;
     private final List<ProxyService> proxies;
@@ -76,6 +76,7 @@ public class RenderController extends AbstractController {
         webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
         webPage.addObject("previous", previousChapter);
+        webPage.addObject("contentStyle", contentStyle(settingsService.getSettings()));
         return webPage;
     }
 

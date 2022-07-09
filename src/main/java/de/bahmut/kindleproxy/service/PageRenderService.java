@@ -21,8 +21,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import static de.bahmut.kindleproxy.constant.CalculationConstants.BODY_PADDING;
-import static de.bahmut.kindleproxy.constant.CalculationConstants.FONT_SIZE;
+import static de.bahmut.kindleproxy.util.PageSpacingCalculator.calculateBodyPadding;
 
 @Log4j2
 @Service
@@ -68,7 +67,7 @@ public class PageRenderService {
         final Map<Integer, Page> pages = new HashMap<>();
         final var pageBuilder = new StringBuilder();
         int currentPage = 1;
-        int currentPageHeight = BODY_PADDING;
+        int currentPageHeight = calculateBodyPadding(settingsService.getSettings().textSize());
         for (final Element element : contentElements) {
             final int elementHeight = calculateElementHeight(element, calibration);
             if (
@@ -78,7 +77,7 @@ public class PageRenderService {
                 pages.put(currentPage, new Page(currentPage, pageBuilder.toString()));
                 pageBuilder.setLength(0);
                 currentPage++;
-                currentPageHeight = BODY_PADDING;
+                currentPageHeight = calculateBodyPadding(settingsService.getSettings().textSize());
             }
             pageBuilder.append(element).append("\n");
             currentPageHeight += elementHeight;
@@ -90,11 +89,11 @@ public class PageRenderService {
     }
 
     private boolean isFirstElement(final int pageNumber, final int pageHeight) {
-        return pageNumber == 1 && pageHeight == BODY_PADDING;
+        return pageNumber == 1 && pageHeight == calculateBodyPadding(settingsService.getSettings().textSize());
     }
 
     private boolean exceedsPageSize(final int elementHeight, final int pageHeight, final int maxPageHeight) {
-        return (pageHeight + elementHeight - FONT_SIZE) > maxPageHeight;
+        return (pageHeight + elementHeight - settingsService.getSettings().textSize()) > maxPageHeight;
     }
 
     private int calculateElementHeight(final Element element, final DeviceCalibration calibration) {
@@ -103,9 +102,9 @@ public class PageRenderService {
                 .findFirst();
         if (elementCalculator.isEmpty()) {
             log.warn("Could not find calculator for element: " + element.tag().normalName() + "; Using fallback calculator");
-            return paragraphElementCalculator.calculateElementHeight(element, calibration);
+            return paragraphElementCalculator.calculateElementHeight(element, calibration, settingsService.getSettings());
         }
-        return elementCalculator.get().calculateElementHeight(element, calibration);
+        return elementCalculator.get().calculateElementHeight(element, calibration, settingsService.getSettings());
     }
 
 }

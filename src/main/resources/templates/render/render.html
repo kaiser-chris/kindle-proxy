@@ -9,6 +9,6 @@
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <a onclick="prevPage();" class="touch-link" id="left"></a>
         <a onclick="nextPage();" class="touch-link" id="right"></a>
-        <div id="content" th:utext="${content.body()}"></div>
+        <div th:style="${contentStyle}" id="content" th:utext="${content.body()}"></div>
     </body>
 </html>

@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
 
-abstract class AbstractController {
+interface ProxyBasedController {
 
-    Optional<ProxyService> findProxyService(final UUID id, final List<ProxyService> proxies) {
+    default Optional<ProxyService> findProxyService(final UUID id, final List<ProxyService> proxies) {
         return proxies.stream()
                 .filter(proxy -> proxy.getId().equals(id))
                 .findAny();

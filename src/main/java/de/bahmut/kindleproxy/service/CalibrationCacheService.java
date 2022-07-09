@@ -1,11 +1,8 @@
 package de.bahmut.kindleproxy.service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,6 +58,18 @@ public class CalibrationCacheService {
             return Optional.of(jsonMapper.readValue(Files.readAllBytes(cacheFile), DeviceCalibration.class));
         } catch (IOException e) {
             throw new CalibrationException("Could not read calibration from disk", e);
+        }
+    }
+
+    public void deleteCalibration(final UUID userIdentifier) throws CalibrationException {
+        final Path cacheFile = cacheFolder.resolve(userIdentifier + ".json");
+        if (Files.notExists(cacheFile)) {
+            return;
+        }
+        try {
+            Files.delete(cacheFile);
+        } catch (IOException e) {
+            throw new CalibrationException("Could not delete calibration from disk", e);
         }
     }
 

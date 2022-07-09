@@ -20,7 +20,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
-public class CalibrateController {
+public class CalibrateController implements RenderingController {
 
     private static final double DEFAULT_RATIO = 0.9;
 
@@ -39,7 +39,9 @@ public class CalibrateController {
             settingsService.cacheCalibration(calibration);
         } catch (final CalibrationException e) {
             log.warn("Invalid calibration", e);
-            return new ModelAndView("calibrate");
+            final var webPage = new ModelAndView("calibrate");
+            webPage.addObject("contentStyle", contentStyle(settingsService.getSettings()));
+            return webPage;
         }
         if (redirect != null) {
             return new ModelAndView("redirect:" + redirect);

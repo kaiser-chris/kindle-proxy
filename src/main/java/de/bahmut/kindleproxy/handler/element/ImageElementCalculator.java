@@ -8,13 +8,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.UserSettings;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-
-import static de.bahmut.kindleproxy.constant.CalculationConstants.FONT_SIZE;
 
 @Log4j2
 @Component
@@ -26,7 +24,11 @@ public class ImageElementCalculator implements ElementCalculator {
     }
 
     @Override
-    public int calculateElementHeight(Element imageElement, DeviceCalibration calibration) {
+    public int calculateElementHeight(
+            final Element imageElement,
+            final DeviceCalibration calibration,
+            final UserSettings settings
+    ) {
         final String heightValue = imageElement.attributes().get("height");
         if (StringUtils.isNotBlank(heightValue)) {
             return Integer.parseInt(heightValue);
@@ -53,7 +55,7 @@ public class ImageElementCalculator implements ElementCalculator {
             }
         } catch (final IOException e) {
             log.warn("Could not download embedded image", e);
-            return FONT_SIZE;
+            return settings.textSize();
         }
     }
 

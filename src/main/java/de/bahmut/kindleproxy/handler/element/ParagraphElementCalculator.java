@@ -1,14 +1,13 @@
 package de.bahmut.kindleproxy.handler.element;
 
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.UserSettings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
-
-import static de.bahmut.kindleproxy.constant.CalculationConstants.FONT_SIZE;
 
 @Log4j2
 @Component
@@ -25,7 +24,11 @@ public class ParagraphElementCalculator extends AbstractLineCalculator {
     }
 
     @Override
-    public int calculateElementHeight(Element element, DeviceCalibration calibration) {
+    public int calculateElementHeight(
+            final Element element,
+            final DeviceCalibration calibration,
+            final UserSettings settings
+    ) {
         final String[] textLines = element.html()
                 .replace("</br>", "<br> ")
                 .replace("<br>", "<br> ")
@@ -33,14 +36,14 @@ public class ParagraphElementCalculator extends AbstractLineCalculator {
         int elementHeight = 0;
         if (element.toString().startsWith("<p")) {
             // Paragraph padding
-            elementHeight += FONT_SIZE;
+            elementHeight += settings.textSize();
         }
         for (String line : textLines) {
             final Document htmlLine = Jsoup.parse(line);
             elementHeight += htmlLine.getElementsByTag("img").stream()
-                    .map(imageElement -> imageElementCalculator.calculateElementHeight(imageElement, calibration))
+                    .map(imageElement -> imageElementCalculator.calculateElementHeight(imageElement, calibration, settings))
                     .reduce(0, Integer::sum);
-            elementHeight += calculateTextLineHeight(htmlLine, calibration);
+            elementHeight += calculateTextLineHeight(htmlLine, calibration, settings);
         }
         return elementHeight;
     }

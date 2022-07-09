@@ -1,10 +1,9 @@
 package de.bahmut.kindleproxy.handler.element;
 
 import de.bahmut.kindleproxy.model.DeviceCalibration;
+import de.bahmut.kindleproxy.model.UserSettings;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
-
-import static de.bahmut.kindleproxy.constant.CalculationConstants.FONT_SIZE;
 
 @Component
 public class HorizontalRuleElementCalculator implements ElementCalculator {
@@ -15,8 +14,12 @@ public class HorizontalRuleElementCalculator implements ElementCalculator {
     }
 
     @Override
-    public int calculateElementHeight(Element element, DeviceCalibration calibration) {
-        return FONT_SIZE + 1;
+    public int calculateElementHeight(
+            final Element element,
+            final DeviceCalibration calibration,
+            final UserSettings settings
+    ) {
+        return settings.textSize() + 1;
     }
 
 }

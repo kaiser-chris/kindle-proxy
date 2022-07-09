@@ -1,7 +1,6 @@
 package de.bahmut.kindleproxy.web;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ import static org.springframework.web.util.UriUtils.encode;
 
 @Controller
 @RequiredArgsConstructor
-public class BrowseController extends AbstractController {
+public class BrowseController implements ProxyBasedController {
 
     private final List<ProxyService> proxies;
 
