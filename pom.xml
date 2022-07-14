@@ -11,7 +11,7 @@
 
 	<groupId>de.bahmut</groupId>
 	<artifactId>kindle-proxy</artifactId>
-	<version>1.0.44</version>
+	<version>1.0.45</version>
 	<name>Kindle Proxy</name>
 	<description>Simple Amazon Kindle Proxy</description>
 
