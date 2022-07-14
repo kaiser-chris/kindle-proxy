@@ -29,15 +29,17 @@ public class UserSettingsService {
     @Getter
     private UserSettings settings;
 
-    final HttpServletRequest request;
+    private final HttpServletResponse response;
 
-    final HttpServletResponse response;
     private final CalibrationCacheService calibrationCacheService;
+
+    private final CacheService cacheService;
 
     public UserSettingsService(
             HttpServletRequest request,
             HttpServletResponse response,
-            CalibrationCacheService calibrationCacheService
+            CalibrationCacheService calibrationCacheService,
+            CacheService cacheService
     ) {
         final Cookie userIdentifierCookie = WebUtils.getCookie(request, COOKIE_USER_SESSION);
         final Optional<UUID> userIdentifier = getUserIdentifierFromCookie(userIdentifierCookie);
@@ -49,8 +51,8 @@ public class UserSettingsService {
             response.addCookie(cookie);
         }
         this.calibrationCacheService = calibrationCacheService;
-        this.request = request;
         this.response = response;
+        this.cacheService = cacheService;
         final Cookie settingsCookie = WebUtils.getCookie(request, COOKIE_USER_SETTINGS);
         final Optional<UserSettings> settings = getSettingsFromCookie(settingsCookie);
         if (settings.isPresent()) {
@@ -96,9 +98,13 @@ public class UserSettingsService {
     }
 
     public void saveSettings(final UserSettings settings) {
+        if (this.settings.equals(settings)) {
+            return;
+        }
         final Cookie cookie = new Cookie(COOKIE_USER_SETTINGS, convertToCookieValue(settings));
         response.addCookie(cookie);
         this.settings = settings;
+        cacheService.invalidItemsByConditionIdentifier(userIdentifier.toString());
     }
 
     private String convertToCookieValue(final UserSettings settings) {

@@ -49,6 +49,7 @@ docker run -d -p 80:80 ghcr.io/kaiser-chris/kindle-proxy:latest
 # Image Attribution
 
  - [Home Icon](/src/main/resources/static/img/home-solid.svg) by [Font Awesome](https://fontawesome.com/license)
+ - [Gear Icon](/src/main/resources/static/img/gear-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [Arrow Left](/src/main/resources/static/img/arrow-left-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [Arrow Right](/src/main/resources/static/img/arrow-right-solid.svg) by [Font Awesome](https://fontawesome.com/license)
  - [Sync Icon](/src/main/resources/static/img/sync-solid.svg) by [Font Awesome](https://fontawesome.com/license)

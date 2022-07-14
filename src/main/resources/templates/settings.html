@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head th:replace="fragments/general.html :: headerfiles(title='User Settings')">
+        <title>Replaced</title>
+    </head>
+    <body>
+        <div id="page">
+            <a id="back" th:href="${source}">Go back</a>
+
+            <h1>User Actions</h1>
+            <a id="calibrate" th:href="${calibrate}">Calibrate</a>
+
+            <h1>User Settings</h1>
+            <form action="#" th:action="@{/settings}" th:object="${settings}" method="post">
+                <p><label for="textSize">Text Size</label> <input id="textSize" type="range" min="12" step="4" max="48" th:field="*{textSize}" /></p>
+                <input type="hidden" id="source" name="source" th:value="${source}">
+                <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+            </form>
+        </div>
+    </body>
+</html>
