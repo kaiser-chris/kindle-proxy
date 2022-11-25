@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title='Browse - ' + ${title})">
+    <head th:replace="~{fragments/general.html :: headerfiles(title='Browse - ' + ${title})}">
         <title>Replaced</title>
     </head>
     <body>
-        <div th:replace="fragments/general :: menuBrowse (base=${currentUrl}, proxy=${proxy}, book=${book})" ></div>
+        <div th:replace="~{fragments/general :: menuBrowse (base=${currentUrl}, proxy=${proxy}, book=${book})}" ></div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <div id="page">

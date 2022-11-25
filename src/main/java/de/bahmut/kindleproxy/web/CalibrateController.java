@@ -6,6 +6,7 @@ import java.util.Map;
 import de.bahmut.kindleproxy.exception.CalibrationException;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.service.UserSettingsService;
+import de.bahmut.kindleproxy.web.base.RenderingController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;

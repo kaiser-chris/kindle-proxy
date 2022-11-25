@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="fragments/general.html :: headerfiles(title='User Settings')">
+    <head th:replace="~{fragments/general.html :: headerfiles(title='User Settings')}">
         <title>Replaced</title>
     </head>
     <body>
@@ -12,7 +12,31 @@
 
             <h1>User Settings</h1>
             <form action="#" th:action="@{/settings}" th:object="${settings}" method="post">
-                <p><label for="textSize">Text Size</label> <input id="textSize" type="range" min="12" step="4" max="48" th:field="*{textSize}" /></p>
+                <div id="settings-font-size">
+                    <div class="text">Text Size</div>
+                    <div class="interaction">
+                        <a onclick="settingsFontSizeMinus();" class="minus">
+                            <img alt="Minus Button" src="/img/minus-solid.svg">
+                        </a>
+                        <span id="settings-font-size-value" th:text="${settings.getTextSize()}"></span>
+                        <a onclick="settingsFontSizePlus();" class="plus">
+                            <img alt="Plus Button" src="/img/plus-solid.svg">
+                        </a>
+                    </div>
+                    <div class="boxes">
+                        <span class="active"></span>
+                        <span class="active"></span>
+                        <span class="active"></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <p><input id="textSize" type="hidden" th:field="*{textSize}" /></p>
                 <input type="hidden" id="source" name="source" th:value="${source}">
                 <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
             </form>

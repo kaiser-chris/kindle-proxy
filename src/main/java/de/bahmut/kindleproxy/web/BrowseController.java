@@ -11,6 +11,7 @@ import de.bahmut.kindleproxy.model.Book;
 import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
 import de.bahmut.kindleproxy.util.StreamHelper;
+import de.bahmut.kindleproxy.web.base.ProxyBasedController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

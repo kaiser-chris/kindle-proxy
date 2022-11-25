@@ -1,8 +1,8 @@
-package de.bahmut.kindleproxy.web;
+package de.bahmut.kindleproxy.web.base;
 
 import de.bahmut.kindleproxy.model.UserSettings;
 
-interface RenderingController {
+public interface RenderingController {
 
     default String contentStyle(final UserSettings settings) {
         return "font-size: " +

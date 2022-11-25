@@ -13,6 +13,8 @@ import de.bahmut.kindleproxy.model.RenderedChapter;
 import de.bahmut.kindleproxy.service.PageRenderService;
 import de.bahmut.kindleproxy.service.UserSettingsService;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
+import de.bahmut.kindleproxy.web.base.ProxyBasedController;
+import de.bahmut.kindleproxy.web.base.RenderingController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;

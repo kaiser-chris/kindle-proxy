@@ -198,3 +198,55 @@ div.char-test {
     width: auto;
     white-space: nowrap;
 }
+
+div#settings-font-size {
+    height: 4.5em;
+    line-height: 3em;
+    width: 100%;
+    position: relative;
+}
+    div#settings-font-size a {
+        height: 3em;
+        line-height: 3em;
+        margin: 0 0.5em 0 0.5em;
+    }
+    div#settings-font-size img {
+        height: 3em;
+    }
+    div#settings-font-size #settings-font-size-value {
+        font-size: 3em;
+        display: inline-block;
+        text-align: center;
+    }
+    div#settings-font-size div.text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 3em;
+        line-height: 3em;
+    }
+    div#settings-font-size div.interaction {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 3em;
+        line-height: 3em;
+    }
+    div#settings-font-size .boxes {
+        position: absolute;
+        bottom: 0;
+        display: table;
+        height: 0.5em;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0.5em 0;
+    }
+        div#settings-font-size .boxes span {
+            display: table-cell;
+            height: 0.5em;
+            line-height: 0.5em;
+            border: 2px #000000 solid;
+        }
+            div#settings-font-size .boxes span.active {
+                background-color: #000000;
+            }
