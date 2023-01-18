@@ -5,8 +5,8 @@ public record Chapter(
         String bookIdentifier,
         String title,
         String htmlBody,
-        String nextChapterIdentifier,
-        String previousChapterIdentifier
+        SiblingReference nextChapter,
+        SiblingReference previousChapter
 ) {
 
 }

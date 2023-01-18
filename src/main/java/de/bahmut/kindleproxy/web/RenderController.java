@@ -54,8 +54,18 @@ public class RenderController implements ProxyBasedController, RenderingControll
         }
         final Chapter chapter = proxy.get().getChapter(bookId, chapterId);
         final RenderedChapter renderedChapter = renderService.renderChapter(chapter, calibration.get());
-        final String previousChapter = getRenderUrl(proxyId, bookId, chapter.previousChapterIdentifier(), 1);
-        final String nextChapter = getRenderUrl(proxyId, bookId, chapter.nextChapterIdentifier(), 1);
+        final String previousChapter = getRenderUrl(
+                proxyId,
+                chapter.previousChapter().siblingBookIdentifier(),
+                chapter.previousChapter().siblingChapterIdentifier(),
+                1
+        );
+        final String nextChapter = getRenderUrl(
+                proxyId,
+                chapter.nextChapter().siblingBookIdentifier(),
+                chapter.nextChapter().siblingChapterIdentifier(),
+                1
+        );
         final var webPage = new ModelAndView();
         if (page == 0 && previousChapter != null) {
             webPage.setViewName("render/previous-chapter");

@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document;
 @RequiredArgsConstructor
 public abstract class CachedWebProxyService implements ProxyService {
 
-    private final CacheService cacheService;
+    protected final CacheService cacheService;
 
     protected Document retrieveDocument(final String url) throws ProxyException {
         final Optional<Document> cachedPage = cacheService.getCachedItem(url, Document.class);

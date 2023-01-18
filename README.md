@@ -4,7 +4,8 @@ This application proxies different web novel pages and renders them in a Kindle 
 
 ## Supported Pages
 
- - Royal Road
+ - [Royal Road](https://www.royalroad.com/)
+ - [The Wandering Inn](https://wanderinginn.com/)
 
 ## Tested Devices
 

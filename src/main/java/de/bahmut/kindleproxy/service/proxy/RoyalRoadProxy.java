@@ -9,6 +9,7 @@ import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
 import de.bahmut.kindleproxy.model.Reference;
 import de.bahmut.kindleproxy.model.Chapter;
+import de.bahmut.kindleproxy.model.SiblingReference;
 import de.bahmut.kindleproxy.service.CacheService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -69,8 +70,8 @@ public class RoyalRoadProxy extends CachedWebProxyService {
                 bookIdentifier,
                 page.title(),
                 chapterContent.get(0).html(),
-                getIdentifier(linkNext),
-                getIdentifier(linkPrevious)
+                new SiblingReference(getIdentifier(linkNext), bookIdentifier),
+                new SiblingReference(getIdentifier(linkPrevious), bookIdentifier)
         );
     }
 
@@ -106,7 +107,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
             if (identifier == null) {
                 continue;
             }
-            books.add(new Reference(identifier, Objects.requireNonNullElse(title, identifier)));
+            books.add(new Reference(identifier, String.format(URL_PATTERN_BOOK, identifier), Objects.requireNonNullElse(title, identifier)));
         }
         return books;
     }
@@ -114,6 +115,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     private Reference getBookReference(final Element link) {
         return new Reference(
                 getIdentifier(link),
+                link.attr("href"),
                 link.text().strip()
         );
     }
@@ -121,6 +123,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     private Reference getChapterReference(final Element link) {
         return new Reference(
                 getIdentifier(link),
+                link.attr("href"),
                 link.text().strip()
         );
     }
@@ -128,17 +131,17 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     private String getIdentifier(final Element link) {
         if (link == null) {
             log.warn("No Chapter link found");
-            return null;
+            return "";
         }
         if ("disabled".equalsIgnoreCase(link.attr("disabled"))) {
             log.trace("Chapter does not exist or is disabled: " + link);
-            return null;
+            return "";
         }
         final String url = link.attr("href");
         final String[] urlParts = url.split("/");
         if (urlParts.length < 2) {
             log.warn("Found an invalid identifier link: " + url + " in element: " + link);
-            return null;
+            return "";
         }
         return urlParts[urlParts.length - 2] + "/" + urlParts[urlParts.length - 1];
     }
