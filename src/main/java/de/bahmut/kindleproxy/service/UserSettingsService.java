@@ -5,6 +5,7 @@ import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.model.UserSettings;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.util.WebUtils;
@@ -35,12 +36,16 @@ public class UserSettingsService {
 
     private final CacheService cacheService;
 
+    private final int defaultFontSize;
+
     public UserSettingsService(
             HttpServletRequest request,
             HttpServletResponse response,
             CalibrationCacheService calibrationCacheService,
-            CacheService cacheService
+            CacheService cacheService,
+            @Value("${settings.default.font-size}") int defaultFontSize
     ) {
+        this.defaultFontSize = defaultFontSize;
         final Cookie userIdentifierCookie = WebUtils.getCookie(request, COOKIE_USER_SESSION);
         final Optional<UUID> userIdentifier = getUserIdentifierFromCookie(userIdentifierCookie);
         if (userIdentifier.isPresent()) {
@@ -59,7 +64,7 @@ public class UserSettingsService {
             this.settings = settings.get();
         } else {
             this.settings = new UserSettings();
-            saveSettings(this.settings);
+            saveSettings(initializeSettings());
         }
     }
 
@@ -119,8 +124,12 @@ public class UserSettingsService {
             );
         } catch (final Exception e) {
             log.warn("Could not parse user settings for user " + userIdentifier + " from cookie", e);
-            return new UserSettings();
+            return initializeSettings();
         }
+    }
+
+    private UserSettings initializeSettings() {
+        return new UserSettings(defaultFontSize);
     }
 
 }

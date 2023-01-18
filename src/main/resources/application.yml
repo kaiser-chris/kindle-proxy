@@ -8,6 +8,10 @@ server:
     session:
       tracking-modes: cookie
 
+settings:
+  default:
+    font-size: ${SETTINGS_DEFAULT_FONT_SIZE:36}
+
 proxy:
   calibration:
     cache-directory: calibration-cache

@@ -9,6 +9,7 @@ This application proxies different web novel pages and renders them in a Kindle 
 ## Tested Devices
 
  - Kindle Paperwhite 2
+ - Kindle Paperwhite (11th generation)
 
 Here is a guide to identify which kindle you own: https://www.androidauthority.com/which-kindle-model-do-i-have-1073996/
 
@@ -21,9 +22,10 @@ Images are currently published to the GitHub package registry.
 
 These variables can be set to configure your setup.
 
-| Variable           | Description                                                                                                                                                                                                                                           |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ROYAL_ROAD_PROFILE | Set this to your Royal Road public profile id (can be found in the url) to show only your favorite items in the book overview. When it is left blank only the 'Best Rated' books are listed since Royal Road has too much content to list everything. |
+| Variable                   | Description                                                                                                                                                                                                                                           |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ROYAL_ROAD_PROFILE         | Set this to your Royal Road public profile id (can be found in the url) to show only your favorite items in the book overview. When it is left blank only the 'Best Rated' books are listed since Royal Road has too much content to list everything. |
+| SETTINGS_DEFAULT_FONT_SIZE | Set this to overwrite the default font size (24 Pixel). This is an integer value in Pixel.                                                                                                                                                            |
 
 ## Examples
 

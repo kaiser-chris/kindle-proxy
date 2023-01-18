@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.web.util.UriUtils.encode;
 
@@ -30,7 +31,7 @@ public class SettingsController {
     public ModelAndView showSettings(
             @RequestParam(value = "source", required = false) String sourceUrl
     ) {
-        final var view = new ModelAndView("settings");
+        final var view = createSettingsModelAndView();
         view.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
         view.addObject("settings", settingsService.getSettings());
         view.addObject("source", getSourceUrl(sourceUrl));
@@ -44,12 +45,19 @@ public class SettingsController {
             @RequestParam("source") String sourceUrl
     ) {
         settingsService.saveSettings(settings);
-        final var view = new ModelAndView("settings");
+        final var view = createSettingsModelAndView();
         view.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
         view.addObject("settings", settings);
         view.addObject("source", getSourceUrl(sourceUrl));
         view.addObject("isSaved", true);
         return view;
+    }
+
+    private ModelAndView createSettingsModelAndView() {
+        final var modelAndView = new ModelAndView();
+        modelAndView.setViewName("settings");
+        modelAndView.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
+        return modelAndView;
     }
 
     private String getSourceUrl(final String sourceUrl) {

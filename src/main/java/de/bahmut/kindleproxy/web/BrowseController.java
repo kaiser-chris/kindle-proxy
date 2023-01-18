@@ -9,6 +9,7 @@ import de.bahmut.kindleproxy.exception.NotFoundException;
 import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Book;
 import de.bahmut.kindleproxy.model.Reference;
+import de.bahmut.kindleproxy.service.UserSettingsService;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
 import de.bahmut.kindleproxy.util.StreamHelper;
 import de.bahmut.kindleproxy.web.base.ProxyBasedController;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static org.springframework.web.util.UriUtils.encode;
@@ -28,6 +30,8 @@ import static org.springframework.web.util.UriUtils.encode;
 public class BrowseController implements ProxyBasedController {
 
     private final List<ProxyService> proxies;
+
+    private final UserSettingsService settingsService;
 
     @GetMapping("/")
     public ModelAndView home(
@@ -89,6 +93,7 @@ public class BrowseController implements ProxyBasedController {
     private ModelAndView createBrowseModelAndView() {
         final var modelAndView = new ModelAndView();
         modelAndView.setViewName("browse");
+        modelAndView.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
         return modelAndView;
     }
 

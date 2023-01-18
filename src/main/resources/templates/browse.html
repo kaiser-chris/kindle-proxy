@@ -7,7 +7,7 @@
         <div th:replace="~{fragments/general :: menuBrowse (base=${currentUrl}, proxy=${proxy}, book=${book})}" ></div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
-        <div id="page">
+        <div th:style="${contentStyle}" id="page">
             <h1 th:text="'Browse - ' + ${title}"></h1>
             <ul>
                 <li th:each="link : ${list.entrySet()}">

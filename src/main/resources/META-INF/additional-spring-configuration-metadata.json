@@ -9,6 +9,11 @@
       "name": "proxy.calibration.cache-directory",
       "type": "java.lang.String",
       "description": "Directory where device calibrations are cached."
+    },
+    {
+      "name": "setting.default-font-size",
+      "type": "java.lang.Integer",
+      "description": "Default font size in Pixel"
     }
   ]
 }
