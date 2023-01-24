@@ -3,43 +3,57 @@
     <head th:replace="~{fragments/general.html :: headerfiles(title='User Settings')}">
         <title>Replaced</title>
     </head>
-    <body>
-        <div th:style="${contentStyle}" id="page">
-            <a id="back" th:href="${source}">Go back</a>
-
-            <h1>User Actions</h1>
-            <a id="calibrate" th:href="${calibrate}">Calibrate</a>
-
+    <body th:style="${contentStyle}">
+    <div id="menu" class="header-menu" th:fragment="menuBrowse (base, proxy, book)">
+        <a id="previous" class="button-menu" th:href="${source}">
+            <div class="icon"><img alt="Arrow Left Icon" src="/img/arrow-left-solid.svg"></div>
+            <div class="title"><span>Go Back</span></div>
+        </a>
+        <span class="menu-spacer"></span>
+        <span class="menu-spacer"></span>
+        <span class="menu-spacer"></span>
+        <a id="calibrate" class="button-menu" th:href="${calibrate}">
+            <div class="icon"><img alt="Calibrate Icon" src="/img/sync-solid.svg"></div>
+            <div class="title"><span>Calibrate</span></div>
+        </a>
+    </div>
+        <div id="page">
             <h1>User Settings</h1>
             <form action="#" th:action="@{/settings}" th:object="${settings}" method="post">
+                <input type="hidden" id="source" name="source" th:value="${source}">
                 <div id="settings-font-size">
-                    <div class="text">Text Size</div>
-                    <div class="interaction">
-                        <a onclick="settingsFontSizeMinus();" class="minus">
+                    <div class="text">
+                        Text Size
+                        <a onclick="adjustTextSize(false);" class="minus">
                             <img alt="Minus Button" src="/img/minus-solid.svg">
                         </a>
                         <span id="settings-font-size-value" th:text="${settings.getTextSize()}"></span>
-                        <a onclick="settingsFontSizePlus();" class="plus">
+                        <a onclick="adjustTextSize(true);" class="plus">
                             <img alt="Plus Button" src="/img/plus-solid.svg">
                         </a>
                     </div>
                     <div class="boxes">
-                        <span class="active"></span>
-                        <span class="active"></span>
-                        <span class="active"></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <div class="box-cell"><span class="size-box active"></span></div>
+                        <div class="box-cell"><span class="size-box active"></span></div>
+                        <div class="box-cell"><span class="size-box active"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span class="size-box"></span></div>
                     </div>
                 </div>
-                <p><input id="textSize" type="hidden" th:field="*{textSize}" /></p>
-                <input type="hidden" id="source" name="source" th:value="${source}">
-                <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+                <input id="textSize" type="hidden" th:field="*{textSize}" />
+                <div id="settings-buttons">
+                    <div class="button-row">
+                        <div class="button-cell"><input type="submit" value="Submit" /></div>
+                        <div class="button-cell"><input onclick="location.reload();" type="reset" value="Reset" /></div>
+                    </div>
+                </div>
             </form>
         </div>
+    <script async="" type="text/javascript" src="/js/settings.js"></script>
     </body>
 </html>

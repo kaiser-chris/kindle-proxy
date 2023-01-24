@@ -3,11 +3,29 @@
     <head th:replace="~{fragments/general.html :: headerfiles(title='Browse - ' + ${title})}">
         <title>Replaced</title>
     </head>
-    <body>
-        <div th:replace="~{fragments/general :: menuBrowse (base=${currentUrl}, proxy=${proxy}, book=${book})}" ></div>
-        <a onclick="toggleMenu();" class="touch-link" id="top"></a>
-        <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
-        <div th:style="${contentStyle}" id="page">
+    <body th:style="${contentStyle}">
+        <div id="menu" class="header-menu" th:fragment="menuBrowse (base, proxy, book)">
+            <a id="home" class="button-menu" href="/">
+                <div class="icon"><img alt="Home Icon" src="/img/home-solid.svg"></div>
+                <div class="title"><span>Home</span></div>
+            </a>
+            <form id="search" method="GET">
+                <input th:if="${book != null}" type="hidden" name="book" th:value="${book}">
+                <input th:if="${proxy != null}" type="hidden" name="proxy" th:value="${proxy}">
+                <div>
+                    <input type="text" name="search">
+                </div>
+                <button>
+                    <span class="icon"><img alt="Search Icon" src="/img/search-solid.svg"></span>
+                    <span class="title"><span>Search</span></span>
+                </button>
+            </form>
+            <a id="calibrate" class="button-menu" th:href="${settings}">
+                <div class="icon"><img alt="Sync Icon" src="/img/gear-solid.svg"></div>
+                <div class="title"><span>Settings</span></div>
+            </a>
+        </div>
+        <div id="page">
             <h1 th:text="'Browse - ' + ${title}"></h1>
             <ul>
                 <li th:each="link : ${list.entrySet()}">

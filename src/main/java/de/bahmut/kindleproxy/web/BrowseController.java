@@ -40,6 +40,7 @@ public class BrowseController implements ProxyBasedController {
         final var webPage = createBrowseModelAndView();
         webPage.addObject("title", "Proxies");
         webPage.addObject("currentUrl", "/");
+        webPage.addObject("settings", SettingsController.getSettingsUrl("/"));
         webPage.addObject("list", proxies.stream()
                 .filter(proxy -> isSearched(search, proxy.getName()))
                 .collect(Collectors.toMap(reference -> getProxyUrl(reference.getId()), ProxyService::getName)));
@@ -63,6 +64,7 @@ public class BrowseController implements ProxyBasedController {
             webPage.addObject("currentUrl", getBookUrl(proxyId, bookId));
             webPage.addObject("proxy", proxyId);
             webPage.addObject("book", bookId);
+            webPage.addObject("settings", SettingsController.getSettingsUrl(getBookUrl(proxyId, bookId)));
             webPage.addObject("list", book.chapters().stream()
                             .filter(reference -> isSearched(search, reference.name()))
                             .collect(StreamHelper.toOrderedMap(
@@ -74,6 +76,7 @@ public class BrowseController implements ProxyBasedController {
         webPage.addObject("title", "Books");
         webPage.addObject("proxy", proxyId);
         webPage.addObject("currentUrl", getProxyUrl(proxyId));
+        webPage.addObject("settings", SettingsController.getSettingsUrl(getProxyUrl(proxyId)));
         webPage.addObject("list", proxy.get().getBooks().stream()
                 .filter(reference -> isSearched(search, reference.name()))
                 .collect(StreamHelper.toOrderedMap(

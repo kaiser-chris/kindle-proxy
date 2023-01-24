@@ -32,7 +32,7 @@ body {
 }
     .touch-link#top {
         position: fixed !important;
-        height: 120px;
+        height: 5em;
         width: 100%;
         left: 0;
         top: 0;
@@ -79,7 +79,7 @@ body {
 div#menu {
     position: fixed;
     display: block;
-    height: 120px;
+    height: 5em;
     width: 100%;
     top: 0;
     left: 0;
@@ -88,15 +88,31 @@ div#menu {
     background-color: #FFF;
     z-index: 200;
 }
+div#menu.header-menu {
+    position: relative;
+    display: block;
+    visibility: visible;
+}
+    div#menu span.menu-spacer {
+        position: relative;
+        display: block;
+        outline: none;
+        height: 4em;
+        width: 20%;
+        color: #000000;
+        text-decoration: none;
+        padding: 1em 0 0 0;
+        float: left;
+    }
     div#menu a.button-menu {
         position: relative;
         display: block;
         outline: none;
-        height: 94px;
+        height: 4em;
         width: 20%;
         color: #000000;
-        text-decoration: none;
-        padding: 12px 0 12px;
+        text-decoration: none !important;
+        padding: 1em 0 0 0;
         float: left;
     }
         div#menu a.button-menu.disabled {
@@ -107,29 +123,28 @@ div#menu {
         div#menu .icon {
             position: relative;
             display: block;
-            width: 100%;
-            height: 48px;
+            height: 2em;
             text-align: center;
             vertical-align: middle;
-            padding-bottom: 12px;
+            padding-bottom: 0.5em;
         }
             div#menu .icon img {
-                height: 48px;
+                height: 2em;
             }
         div#menu .title {
             position: relative;
             display: block;
             width: 100%;
-            height: 34px;
-            font-size: 17px;
-            line-height: 34px;
+            height: 1.5em;
+            font-size: 0.7em;
+            line-height: 1.5em;
             text-align: center;
             vertical-align: middle;
         }
     div#menu form#search {
         display: block;
         outline: none;
-        height: 118px;
+        height: 5em;
         width: 60%;
         color: #000000;
         text-decoration: none;
@@ -139,17 +154,16 @@ div#menu {
             position: relative;
             display: block;
             outline: none;
-            height: 94px;
+            height: 4em;
             width: 67%;
             color: #000000;
             text-decoration: none;
-            padding: 12px 0 12px;
             float: left;
             text-align: center;
         }
             div#menu form#search input {
-                font-size: 36px;
-                margin: 24px;
+                font-size: 1.5em;
+                margin: 1em;
                 width: 90%;
                 border: 1px solid #000000;
                 border-radius: 5px;
@@ -158,10 +172,11 @@ div#menu {
             border: 0;
             background-color: #FFFFFF;
             width: 33%;
-            height: 118px;
+            height: 4em;
+            font-size: 1em;
             color: #000000;
             text-decoration: none;
-            padding: 12px 0 12px 0;
+            padding: 1em 0 0 0;
             cursor: pointer;
         }
 
@@ -199,6 +214,34 @@ div.char-test {
     white-space: nowrap;
 }
 
+div#settings-buttons {
+    margin: 4em 0 0 0;
+    display: table;
+    table-layout: auto;
+    width: 100%;
+}
+    div#settings-buttons div.button-row {
+        display: table-row;
+    }
+    div#settings-buttons div.button-row div.button-cell {
+        display: table-cell;
+        width: 45%;
+        padding: 0 5% 0 0;
+    }
+    div#settings-buttons div.button-row div.button-cell:last-child {
+        padding: 0 0 0 5%;
+    }
+    div#settings-buttons input {
+        height: 4.5em;
+        line-height: 3em;
+        padding: 0;
+        border: 0;
+        width: 100%;
+        background-color: #000;
+        color: #FFF;
+        cursor: pointer;
+    }
+
 div#settings-font-size {
     height: 4.5em;
     line-height: 3em;
@@ -209,28 +252,16 @@ div#settings-font-size {
         height: 3em;
         line-height: 3em;
         margin: 0 0.5em 0 0.5em;
+        float: right;
+        cursor: pointer;
     }
     div#settings-font-size img {
         height: 3em;
+        width: 3em;
     }
     div#settings-font-size #settings-font-size-value {
         font-size: 3em;
-        display: inline-block;
-        text-align: center;
-    }
-    div#settings-font-size div.text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 3em;
-        line-height: 3em;
-    }
-    div#settings-font-size div.interaction {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 3em;
-        line-height: 3em;
+        float: right;
     }
     div#settings-font-size .boxes {
         position: absolute;
@@ -238,15 +269,21 @@ div#settings-font-size {
         display: table;
         height: 0.5em;
         width: 100%;
-        border-collapse: separate;
-        border-spacing: 0.5em 0;
     }
-        div#settings-font-size .boxes span {
+        div#settings-font-size .boxes .box-cell {
             display: table-cell;
-            height: 0.5em;
-            line-height: 0.5em;
-            border: 2px #000000 solid;
+            width: 10.2%;
+            padding: 0 2% 0 0;
         }
-            div#settings-font-size .boxes span.active {
-                background-color: #000000;
+            div#settings-font-size .boxes .box-cell:last-child {
+                padding: 0;
+                width: 8.2%;
             }
+            div#settings-font-size .boxes span {
+                display: block;
+                height: 0.5em;
+                border: 2px #000000 solid;
+            }
+                div#settings-font-size .boxes span.active {
+                    background-color: #000000;
+                }
