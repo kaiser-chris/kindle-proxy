@@ -10,7 +10,7 @@ server:
 
 settings:
   default:
-    font-size: ${SETTINGS_DEFAULT_FONT_SIZE:36}
+    font-size: ${SETTINGS_DEFAULT_FONT_SIZE:24}
 
 proxy:
   calibration:
