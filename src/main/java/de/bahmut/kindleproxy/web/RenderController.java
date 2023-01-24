@@ -10,6 +10,7 @@ import de.bahmut.kindleproxy.exception.ProxyException;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.model.RenderedChapter;
+import de.bahmut.kindleproxy.model.SiblingReference;
 import de.bahmut.kindleproxy.service.PageRenderService;
 import de.bahmut.kindleproxy.service.UserSettingsService;
 import de.bahmut.kindleproxy.service.proxy.ProxyService;
@@ -56,14 +57,12 @@ public class RenderController implements ProxyBasedController, RenderingControll
         final RenderedChapter renderedChapter = renderService.renderChapter(chapter, calibration.get());
         final String previousChapter = getRenderUrl(
                 proxyId,
-                chapter.previousChapter().siblingBookIdentifier(),
-                chapter.previousChapter().siblingChapterIdentifier(),
+                chapter.previousChapter(),
                 1
         );
         final String nextChapter = getRenderUrl(
                 proxyId,
-                chapter.nextChapter().siblingBookIdentifier(),
-                chapter.nextChapter().siblingChapterIdentifier(),
+                chapter.nextChapter(),
                 1
         );
         final var webPage = new ModelAndView();
@@ -108,6 +107,17 @@ public class RenderController implements ProxyBasedController, RenderingControll
         } else {
             return baseUrl;
         }
+    }
+
+    public static String getRenderUrl(
+            final UUID proxyId,
+            final SiblingReference reference,
+            final Integer page
+    ) {
+        if (proxyId == null || reference == null) {
+            return null;
+        }
+        return getRenderUrl(proxyId, reference.siblingBookIdentifier(), reference.siblingChapterIdentifier(), page);
     }
 
 }
