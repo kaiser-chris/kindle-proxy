@@ -13,7 +13,12 @@
     {
       "name": "setting.default-font-size",
       "type": "java.lang.Integer",
-      "description": "Default font size in Pixel"
+      "description": "Default font size in Pixel."
+    },
+    {
+      "name": "settings.font-size-scale",
+      "type": "java.lang.String",
+      "description": "Font size scale in the settings."
     }
   ]
 }

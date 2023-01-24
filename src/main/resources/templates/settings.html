@@ -4,6 +4,7 @@
         <title>Replaced</title>
     </head>
     <body th:style="${contentStyle}">
+        <script th:text="'var scale = [' + ${fontSizeScale} + '];'" />
     <div id="menu" class="header-menu" th:fragment="menuBrowse (base, proxy, book)">
         <a id="previous" class="button-menu" th:href="${source}">
             <div class="icon"><img alt="Arrow Left Icon" src="/img/arrow-left-solid.svg"></div>

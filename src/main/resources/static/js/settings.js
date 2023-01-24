@@ -1,5 +1,4 @@
 function adjustTextSize(increase) {
-    var scale = [12, 16, 20, 24, 28, 32, 36, 40, 44, 48];
     var sizeElement = document.getElementById("settings-font-size-value");
     var sizeFormElement = document.getElementById("textSize");
     var currentSize = sizeElement.textContent;
@@ -22,7 +21,6 @@ function adjustTextSize(increase) {
 }
 
 function renderTextSize() {
-    var scale = [12, 16, 20, 24, 28, 32, 36, 40, 44, 48];
     var sizeElement = document.getElementById("settings-font-size-value");
     var currentSize = sizeElement.textContent;
     var index = scale.indexOf(+currentSize);
