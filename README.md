@@ -49,6 +49,13 @@ services:
 docker run -d -p 80:80 ghcr.io/kaiser-chris/kindle-proxy:latest
 ```
 
+# Screenshots
+|                        Home Page                        |                                Chapter list                                 |                       Settings page                       |
+|:-------------------------------------------------------:|:---------------------------------------------------------------------------:|:---------------------------------------------------------:|
+|    ![Home page](.documentation/screenshots/home.png)    |        ![Chapter list page](.documentation/screenshots/chapters.png)        | ![Settings page](.documentation/screenshots/settings.png) |
+|                      Content page                       |                         Content page with menu open                         |                                                           |
+| ![Content page](.documentation/screenshots/content.png) | ![Content page with menu open](.documentation/screenshots/content-menu.png) |                                                           |
+
 # Image Attribution
 
  - [Home Icon](/src/main/resources/static/img/home-solid.svg) by [Font Awesome](https://fontawesome.com/license)
