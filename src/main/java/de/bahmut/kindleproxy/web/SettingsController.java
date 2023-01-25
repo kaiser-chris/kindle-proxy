@@ -65,9 +65,12 @@ public class SettingsController {
 
     @PostMapping("/settings")
     public ModelAndView saveSettings(
-            @ModelAttribute UserSettings settings,
+            @RequestParam(name = "textSize") Integer textSize,
+            @RequestParam(name = "footer", required = false) Boolean footer,
             @RequestParam("source") String sourceUrl
     ) {
+        var settings = new UserSettings(textSize);
+        settings.setFooter(Objects.requireNonNullElse(footer, false));
         settingsService.saveSettings(settings);
         final var view = createSettingsModelAndView();
         view.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));

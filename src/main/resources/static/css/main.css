@@ -191,6 +191,29 @@ div#page {
     padding: 0 2em 2em 2em;
 }
 
+div#footer {
+    position: fixed;
+    bottom: 4em;
+    left: 0;
+    box-sizing: border-box;
+    height: 1em;
+    line-height: 1em;
+    font-size: 0.5em;
+    padding: 0 4em 0 4em;
+    width: 100%;
+}
+    div#footer div {
+        width: 50%;
+    }
+    div#footer div#footer-left {
+        float: left;
+        text-align: left;
+    }
+    div#footer div#footer-right {
+        float: right;
+        text-align: right;
+    }
+
 div#chapter-transition {
     display: table;
     position: absolute;
@@ -221,39 +244,66 @@ div.char-test {
     white-space: nowrap;
 }
 
-div#settings-buttons {
-    margin: 4em 0 0 0;
-    display: table;
-    table-layout: auto;
-    width: 100%;
+hr.settings-spacer {
+    margin: 1em 0 1em 0;
+    border: 1px solid gray;
 }
-    div#settings-buttons div.button-row {
-        display: table-row;
+
+div.settings-line {
+    height: 3em;
+    line-height: 3em;
+    width: 100%;
+    position: relative;
+}
+    div.settings-line .switch {
+        position: relative;
+        display: inline-block;
+        width: 6em;
+        height: 2em;
+        margin: 0.5em 0 0.5em 0;
+        float: right;
     }
-    div#settings-buttons div.button-row div.button-cell {
-        display: table-cell;
-        width: 45%;
-        padding: 0 5% 0 0;
+    div.settings-line .switch input[type=checkbox] {
+        opacity: 0;
+        width: 0;
+        height: 0;
     }
-    div#settings-buttons div.button-row div.button-cell:last-child {
-        padding: 0 0 0 5%;
-    }
-    div#settings-buttons input {
-        height: 4.5em;
-        line-height: 3em;
-        padding: 0;
-        border: 0;
-        width: 100%;
-        background-color: #000;
-        color: #FFF;
+    div.settings-line .slider {
+        position: absolute;
         cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    div.settings-line .slider:before {
+        position: absolute;
+        content: "";
+        height: 1em;
+        width: 2em;
+        left: 0.5em;
+        bottom: 0.5em;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    div.settings-line input[type=checkbox]:checked + .slider {
+        background-color: #000;
+    }
+    div.settings-line input[type=checkbox]:focus + .slider {
+        box-shadow: 0 0 1px #000;
+    }
+    div.settings-line input[type=checkbox]:checked + .slider:before {
+        -webkit-transform: translateX(3em);
+        -ms-transform: translateX(3em);
+        transform: translateX(3em);
     }
 
 div#settings-font-size {
     height: 4.5em;
-    line-height: 3em;
-    width: 100%;
-    position: relative;
 }
     div#settings-font-size a {
         height: 3em;
@@ -294,3 +344,31 @@ div#settings-font-size {
                 div#settings-font-size .boxes span.active {
                     background-color: #000000;
                 }
+
+div#settings-buttons {
+    margin: 3em 0 0 0;
+    display: table;
+    table-layout: auto;
+    width: 100%;
+}
+div#settings-buttons div.button-row {
+    display: table-row;
+}
+div#settings-buttons div.button-row div.button-cell {
+    display: table-cell;
+    width: 45%;
+    padding: 0 5% 0 0;
+}
+div#settings-buttons div.button-row div.button-cell:last-child {
+    padding: 0 0 0 5%;
+}
+div#settings-buttons input {
+    height: 4.5em;
+    line-height: 3em;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    background-color: #000;
+    color: #FFF;
+    cursor: pointer;
+}

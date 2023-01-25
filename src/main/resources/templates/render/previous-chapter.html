@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="~{fragments/general.html :: headerfiles(title=${title})}">
+<head th:replace="~{fragments/general.html :: headerfiles(title=${chapter.chapterTitle()} + ' | ' + ${chapter.bookTitle()})}">
         <title>Replaced</title>
     </head>
     <body th:style="${contentStyle}">
-        <div th:replace="~{fragments/render.html :: menu(book=${book}, previous=${previous}, next=${next}, calibrate=${calibrate})}" ></div>
+        <div th:replace="~{fragments/render.html :: menu(book=${book}, previous=${previous}, next=${next}, settings=${settingsUrl})}" ></div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <a th:href="${previous}" class="touch-link" id="left"></a>

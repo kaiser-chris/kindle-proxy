@@ -22,7 +22,7 @@
             <h1>User Settings</h1>
             <form action="#" th:action="@{/settings}" th:object="${settings}" method="post">
                 <input type="hidden" id="source" name="source" th:value="${source}">
-                <div id="settings-font-size">
+                <div id="settings-font-size" class="settings-line">
                     <div class="text">
                         Text Size
                         <a onclick="adjustTextSize(false);" class="minus">
@@ -46,7 +46,16 @@
                         <div class="box-cell"><span class="size-box"></span></div>
                     </div>
                 </div>
-                <input id="textSize" type="hidden" th:field="*{textSize}" />
+                <hr class="settings-spacer" />
+                <input id="textSize" name="textSize" type="hidden" th:value="${settings.getTextSize()}" />
+                <div id="settings-footer" class="settings-line">
+                    Show Footer
+                    <label class="switch">
+                        <input id="footer" type="checkbox" name="footer" value="true" th:attrappend="checked=${settings.footer()}?'checked'">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <hr class="settings-spacer" />
                 <div id="settings-buttons">
                     <div class="button-row">
                         <div class="button-cell"><input type="submit" value="Submit" /></div>

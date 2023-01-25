@@ -47,7 +47,8 @@ public class PageRenderService {
         final var render = new RenderedChapter(
                 chapter.identifier(),
                 chapter.bookIdentifier(),
-                chapter.title(),
+                chapter.chapterTitle(),
+                chapter.bookTitle(),
                 pages,
                 pages.keySet().stream().mapToInt(v -> v).max().orElse(1)
         );
@@ -93,7 +94,11 @@ public class PageRenderService {
     }
 
     private boolean exceedsPageSize(final int elementHeight, final int pageHeight, final int maxPageHeight) {
-        return (pageHeight + elementHeight - settingsService.getSettings().textSize()) > maxPageHeight;
+        var textSize = settingsService.getSettings().textSize();
+        if (settingsService.getSettings().footer()) {
+            return (pageHeight + elementHeight - textSize) > (maxPageHeight - textSize);
+        }
+        return (pageHeight + elementHeight - textSize) > maxPageHeight;
     }
 
     private int calculateElementHeight(final Element element, final DeviceCalibration calibration) {

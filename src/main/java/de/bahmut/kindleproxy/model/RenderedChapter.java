@@ -5,7 +5,8 @@ import java.util.Map;
 public record RenderedChapter(
         String identifier,
         String bookIdentifier,
-        String title,
+        String chapterTitle,
+        String bookTitle,
         Map<Integer, Page> pages,
         int maxPage
 ) {

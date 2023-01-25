@@ -53,7 +53,8 @@ public class WanderingInnProxy extends CachedWebProxyService {
         return new Chapter(
                 chapterIdentifier,
                 bookIdentifier,
-                page.title(),
+                foundChapter.get().name(),
+                getName(),
                 chapterContent.get(0).html(),
                 getNextChapter(foundChapter.get(), foundBook.get(), cachedProxy),
                 getPreviousChapter(foundChapter.get(), foundBook.get(), cachedProxy)

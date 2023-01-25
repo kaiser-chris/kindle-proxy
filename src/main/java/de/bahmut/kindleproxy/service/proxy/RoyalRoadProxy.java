@@ -40,6 +40,8 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     private static final String HTML_SELECTOR_BOOK_CHAPTERS = "table#chapters td:first-child a";
 
     private static final String URL_PATTERN_CHAPTER = BASE_URL + "fiction/%s/chapter/%s";
+    private static final String HTML_SELECTOR_CHAPTER_TITLE = "div.fic-header h1";
+    private static final String HTML_SELECTOR_CHAPTER_BOOK_TITLE = "div.fic-header h2";
     private static final String HTML_SELECTOR_CHAPTER_CONTENT = "div.chapter-inner.chapter-content";
     private static final String HTML_SELECTOR_CHAPTER_NAVIGATION = ".btn.btn-primary.col-xs-12";
 
@@ -59,6 +61,8 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     public Chapter getChapter(String bookIdentifier, String chapterIdentifier) throws ProxyException {
         final String chapterUrl = String.format(URL_PATTERN_CHAPTER, bookIdentifier, chapterIdentifier);
         final Document page = retrieveDocument(chapterUrl);
+        final String chapterName = page.select(HTML_SELECTOR_CHAPTER_TITLE).stream().findAny().map(Element::text).orElse(chapterIdentifier);
+        final String bookName = page.select(HTML_SELECTOR_CHAPTER_BOOK_TITLE).stream().findAny().map(Element::text).orElse(bookIdentifier);
         final Elements links = page.select(HTML_SELECTOR_CHAPTER_NAVIGATION);
         final Element linkNext = links.stream().filter(element -> element.text().contains("Next") && element.text().contains("Chapter")).findAny().orElse(null);
         final Element linkPrevious = links.stream().filter(element -> element.text().contains("Previous") && element.text().contains("Chapter")).findAny().orElse(null);
@@ -68,7 +72,8 @@ public class RoyalRoadProxy extends CachedWebProxyService {
         return new Chapter(
                 chapterIdentifier,
                 bookIdentifier,
-                page.title(),
+                chapterName,
+                bookName,
                 chapterContent.get(0).html(),
                 new SiblingReference(getIdentifier(linkNext), bookIdentifier),
                 new SiblingReference(getIdentifier(linkPrevious), bookIdentifier)

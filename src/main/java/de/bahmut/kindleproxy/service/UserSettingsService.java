@@ -37,15 +37,18 @@ public class UserSettingsService {
     private final CacheService cacheService;
 
     private final int defaultFontSize;
+    private final boolean defaultShowFooter;
 
     public UserSettingsService(
             HttpServletRequest request,
             HttpServletResponse response,
             CalibrationCacheService calibrationCacheService,
             CacheService cacheService,
-            @Value("${settings.default.font-size}") int defaultFontSize
+            @Value("${settings.default.font-size}") int defaultFontSize,
+            @Value("${settings.default.show-footer}") boolean defaultShowFooter
     ) {
         this.defaultFontSize = defaultFontSize;
+        this.defaultShowFooter = defaultShowFooter;
         final Cookie userIdentifierCookie = WebUtils.getCookie(request, COOKIE_USER_SESSION);
         final Optional<UUID> userIdentifier = getUserIdentifierFromCookie(userIdentifierCookie);
         if (userIdentifier.isPresent()) {
@@ -113,15 +116,23 @@ public class UserSettingsService {
     }
 
     private String convertToCookieValue(final UserSettings settings) {
-        return String.valueOf(settings.textSize());
+        return settings.textSize() + "|" + settings.footer();
     }
 
     private UserSettings convertFromCookieValue(final String cookieValue) {
         final String[] parts = cookieValue.split("\\|");
         try {
-            return new UserSettings(
-                    Integer.parseInt(parts[0])
-            );
+            return switch (parts.length) {
+                case 1 -> new UserSettings(
+                        Integer.parseInt(parts[0]),
+                        defaultShowFooter
+                );
+                case 2 -> new UserSettings(
+                        Integer.parseInt(parts[0]),
+                        Boolean.parseBoolean(parts[1])
+                );
+                default -> initializeSettings();
+            };
         } catch (final Exception e) {
             log.warn("Could not parse user settings for user " + userIdentifier + " from cookie", e);
             return initializeSettings();
@@ -129,7 +140,10 @@ public class UserSettingsService {
     }
 
     private UserSettings initializeSettings() {
-        return new UserSettings(defaultFontSize);
+        return new UserSettings(
+                defaultFontSize,
+                defaultShowFooter
+        );
     }
 
 }
