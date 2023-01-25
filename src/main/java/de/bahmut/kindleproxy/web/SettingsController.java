@@ -43,10 +43,10 @@ public class SettingsController {
                     .map(String::strip)
                     .map(Integer::parseInt)
                     .toArray(Integer[]::new);
-            if (fontSizeScale.length() != 10) {
+            if (this.fontSizeScale.length != 10) {
                 throw new SettingsException("Could not parse font size scale: List has not exactly 10 entries");
             }
-        } catch (final Exception e) {
+        } catch (final NumberFormatException e) {
             throw new SettingsException("Could not parse font size scale: " + e.getMessage(), e);
         }
     }
