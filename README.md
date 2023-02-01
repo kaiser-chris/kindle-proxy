@@ -1,6 +1,7 @@
 # Kindle Proxy
 
 This application proxies different web novel pages and renders them in a Kindle friendly web page.
+It is meant to be used in the Kindle Web browser.
 
 ## Supported Pages
 
@@ -8,6 +9,8 @@ This application proxies different web novel pages and renders them in a Kindle 
  - [The Wandering Inn](https://wanderinginn.com/)
 
 ## Tested Devices
+
+These devices below have been tested. If you want to add a device you have tested please create an issue.
 
  - Kindle Paperwhite 2
  - Kindle Paperwhite (11th generation)
