@@ -13,12 +13,12 @@ function toggleMenu() {
     }
 }
 
-function nextPage() {
-    changePage(1);
+function nextPage(maxPage) {
+    changePage(1, maxPage);
 }
 
-function prevPage() {
-    changePage(-1);
+function prevPage(maxPage) {
+    changePage(-1, maxPage);
 }
 
 function getUrlParam(name){
@@ -31,12 +31,38 @@ function getUrlParam(name){
     }
 }
 
-function changePage(modPage) {
+function changePage(modPage, maxPage) {
     var page = getUrlParam('page');
     if (page == null) {
         page = 1;
     }
-    window.location.href = updateURLParameter(window.location.href, 'page', parseInt(page) + modPage)
+    var currentPage = parseInt(page);
+    var newPageNumber = currentPage + modPage;
+    var url = updateURLParameter(window.location.href, 'page', newPageNumber);
+    // Transition Page handling
+    if (newPageNumber > maxPage || newPageNumber < 1 || currentPage == 0 || currentPage > maxPage) {
+        window.location.href = url;
+    } else {
+        window.history.pushState({},'', url);
+        activatePage(newPageNumber, maxPage)
+    }
+}
+
+function activatePage(pageNumber, maxPage) {
+    var pages = document.getElementsByClassName("page-content");
+
+    for (var i = 0; i < pages.length; i++) {
+        if ((i + 1) == pageNumber) {
+            pages.item(i).setAttribute('class', 'page-content active');
+        } else {
+            pages.item(i).setAttribute('class', 'page-content hidden');
+        }
+    }
+
+    var footerPageCounter = document.getElementById("footer-right");
+    if (footerPageCounter != null) {
+        footerPageCounter.textContent = 'Page ' + pageNumber + ' of ' + maxPage;
+    }
 }
 
 function updateURLParameter(url, param, paramVal) {

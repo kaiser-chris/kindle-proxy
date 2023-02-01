@@ -1,4 +1,4 @@
-div#content {
+div.page-content {
     letter-spacing: 0;
     box-sizing: border-box;
     min-height: 100vh;
@@ -13,26 +13,30 @@ div#content {
     color: #000000 !important;
 }
 
-div#content p {
+div.page-content.hidden {
+    display: none;
+}
+
+div.page-content p {
     margin: 0 0 1em 0;
 }
 
-div#content > *:last-child {
+div.page-content > *:last-child {
     margin: 0 0 0 0;
 }
 
-div#content blockquote {
+div.page-content blockquote {
     border-left: 5px solid #000;
     padding-left: 0.5em;
 }
 
-div#content table, th, td {
+div.page-content table, th, td {
     text-align: left;
     border: 1px solid black;
 }
-div#content table {
+div.page-content table {
     margin-bottom: 1em
 }
-div#content th, td {
+div.page-content th, td {
     padding: 0.2em
 }

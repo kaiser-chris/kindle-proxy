@@ -8,7 +8,7 @@
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <a th:href="${previous}" class="touch-link" id="left"></a>
-        <a onclick="nextPage();" class="touch-link" id="right"></a>
+        <a th:onclick="'nextPage(' + ${chapter.maxPage()} + ');'" class="touch-link" id="right"></a>
         <div id="chapter-transition">
             <div id="transition-table">
                 <div>Turn the page again to go to the previous Chapter</div>

@@ -82,7 +82,6 @@ public class RenderController implements ProxyBasedController, RenderingControll
         webPage.addObject("chapterId", encode(chapterId, UTF_8));
         webPage.addObject("page", page);
         webPage.addObject("chapter", renderedChapter);
-        webPage.addObject("content", renderedChapter.pages().get(page));
         webPage.addObject("settings", settingsService.getSettings());
         webPage.addObject("settingsUrl", SettingsController.getSettingsUrl(getRenderUrl(proxyId, bookId, chapterId, page)));
         webPage.addObject("next", nextChapter);
