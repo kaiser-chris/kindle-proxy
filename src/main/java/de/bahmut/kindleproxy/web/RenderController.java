@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static org.springframework.web.util.UriUtils.encode;
@@ -87,7 +86,6 @@ public class RenderController implements ProxyBasedController, RenderingControll
         webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
         webPage.addObject("previous", previousChapter);
-        webPage.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
         return webPage;
     }
 

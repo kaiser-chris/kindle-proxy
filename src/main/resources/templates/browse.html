@@ -3,7 +3,7 @@
     <head th:replace="~{fragments/general.html :: headerfiles(title='Browse - ' + ${title})}">
         <title>Replaced</title>
     </head>
-    <body th:style="${contentStyle}">
+    <body th:style="'font-size: ' + ${settings.textSize()} + 'px !important;'">
         <div id="menu" class="header-menu" th:fragment="menuBrowse (base, proxy, book)">
             <a id="home" class="button-menu" href="/">
                 <div class="icon"><img alt="Home Icon" src="/img/home-solid.svg"></div>
@@ -20,7 +20,7 @@
                     <span class="title"><span>Search</span></span>
                 </button>
             </form>
-            <a id="calibrate" class="button-menu" th:href="${settings}">
+            <a id="calibrate" class="button-menu" th:href="${settingsUrl}">
                 <div class="icon"><img alt="Sync Icon" src="/img/gear-solid.svg"></div>
                 <div class="title"><span>Settings</span></div>
             </a>

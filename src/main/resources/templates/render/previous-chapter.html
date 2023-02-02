@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/general.html :: headerfiles(title=${chapter.chapterTitle()} + ' | ' + ${chapter.bookTitle()})}">
         <title>Replaced</title>
     </head>
-    <body th:style="${contentStyle}">
+    <body th:style="'font-size: ' + ${settings.textSize()} + 'px !important;'">
         <div th:replace="~{fragments/render.html :: menu(book=${book}, previous=${previous}, next=${next}, settings=${settingsUrl})}" ></div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>

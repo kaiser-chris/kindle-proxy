@@ -10,16 +10,13 @@ import de.bahmut.kindleproxy.exception.SettingsException;
 import de.bahmut.kindleproxy.model.UserSettings;
 import de.bahmut.kindleproxy.service.UserSettingsService;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.web.util.UriUtils.encode;
 
@@ -31,9 +28,11 @@ public class SettingsController {
 
     private final UserSettingsService settingsService;
     private final Integer[] fontSizeScale;
+    private final String[] fontList;
 
     public SettingsController(
             UserSettingsService settingsService,
+            @Value("${settings.font-list}") String fontList,
             @Value("${settings.font-size-scale}") String fontSizeScale
     ) {
         this.settingsService = settingsService;
@@ -49,6 +48,10 @@ public class SettingsController {
         } catch (final NumberFormatException e) {
             throw new SettingsException("Could not parse font size scale: " + e.getMessage(), e);
         }
+        this.fontList = Arrays.stream(fontList.split(","))
+                .filter(Objects::nonNull)
+                .map(String::strip)
+                .toArray(String[]::new);
     }
 
     @GetMapping("/settings")
@@ -56,8 +59,6 @@ public class SettingsController {
             @RequestParam(value = "source", required = false) String sourceUrl
     ) {
         final var view = createSettingsModelAndView();
-        view.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
-        view.addObject("settings", settingsService.getSettings());
         view.addObject("source", getSourceUrl(sourceUrl));
         view.addObject("isSaved", false);
         return view;
@@ -67,14 +68,14 @@ public class SettingsController {
     public ModelAndView saveSettings(
             @RequestParam(name = "textSize") Integer textSize,
             @RequestParam(name = "footer", required = false) Boolean footer,
+            @RequestParam(name = "font") String font,
             @RequestParam("source") String sourceUrl
     ) {
         var settings = new UserSettings(textSize);
         settings.setFooter(Objects.requireNonNullElse(footer, false));
+        settings.setFont(font);
         settingsService.saveSettings(settings);
         final var view = createSettingsModelAndView();
-        view.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
-        view.addObject("settings", settings);
         view.addObject("source", getSourceUrl(sourceUrl));
         view.addObject("isSaved", true);
         return view;
@@ -83,8 +84,10 @@ public class SettingsController {
     private ModelAndView createSettingsModelAndView() {
         final var modelAndView = new ModelAndView();
         modelAndView.setViewName("settings");
-        modelAndView.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
+        modelAndView.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
         modelAndView.addObject("fontSizeScale", renderFontSizeScale(fontSizeScale));
+        modelAndView.addObject("settings", settingsService.getSettings());
+        modelAndView.addObject("fontList", fontList);
         return modelAndView;
     }
 

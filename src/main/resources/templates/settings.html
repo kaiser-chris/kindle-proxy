@@ -3,7 +3,7 @@
     <head th:replace="~{fragments/general.html :: headerfiles(title='User Settings')}">
         <title>Replaced</title>
     </head>
-    <body th:style="${contentStyle}">
+    <body th:style="'font-size: ' + ${settings.textSize()} + 'px !important;'">
         <script th:text="'var scale = [' + ${fontSizeScale} + '];'" />
     <div id="menu" class="header-menu" th:fragment="menuBrowse (base, proxy, book)">
         <a id="previous" class="button-menu" th:href="${source}">
@@ -22,6 +22,13 @@
             <h1>User Settings</h1>
             <form action="#" th:action="@{/settings}" th:object="${settings}" method="post">
                 <input type="hidden" id="source" name="source" th:value="${source}">
+                <div id="settings-font" class="settings-line">
+                    Font
+                    <select name="font" id="font">
+                        <option th:each="font: ${fontList}" th:value="${font}" th:text="${font}" th:attrappend="selected=${settings.getFont().equals(font)} ? 'selected'" />
+                    </select>
+                </div>
+                <hr class="settings-spacer" />
                 <div id="settings-font-size" class="settings-line">
                     <div class="text">
                         Text Size
@@ -51,7 +58,7 @@
                 <div id="settings-footer" class="settings-line">
                     Show Footer
                     <label class="switch">
-                        <input id="footer" type="checkbox" name="footer" value="true" th:attrappend="checked=${settings.footer()}?'checked'">
+                        <input id="footer" type="checkbox" name="footer" value="true" th:attrappend="checked=${settings.footer()} ? 'checked'">
                         <span class="slider"></span>
                     </label>
                 </div>

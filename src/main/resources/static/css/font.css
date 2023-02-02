@@ -1,0 +1,19 @@
+@font-face {
+    font-family: "Literata";
+    src: url("../font/Literata-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../font/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Merriweather";
+    src: url("../font/Merriweather-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url("../font/OpenSans-Regular.ttf");
+}

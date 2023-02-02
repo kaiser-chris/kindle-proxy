@@ -3,13 +3,17 @@
     <head th:replace="~{fragments/general.html :: headerfiles(title=${chapter.chapterTitle()} + ' | ' + ${chapter.bookTitle()})}">
         <title>Replaced</title>
     </head>
-    <body th:style="${contentStyle}">
+    <body th:style="'font-size: ' + ${settings.textSize()} + 'px !important;'">
         <div th:replace="~{fragments/render.html :: menu(book=${book}, previous=${previous}, next=${next}, settings=${settingsUrl})}" ></div>
         <a onclick="toggleMenu();" class="touch-link" id="top"></a>
         <a onclick="toggleMenu();" class="touch-link" id="bottom"></a>
         <a th:onclick="'prevPage(' + ${chapter.maxPage()} + ');'" class="touch-link" id="left"></a>
         <a th:onclick="'nextPage(' + ${chapter.maxPage()} + ');'" class="touch-link" id="right"></a>
-        <div th:each="pageEntry: ${chapter.pages()}" th:utext="${pageEntry.getValue().body()}" th:class="${pageEntry.getValue().pageNumber() == page}? 'page-content active' : 'page-content hidden'"></div>
+        <div th:each="pageEntry: ${chapter.pages()}"
+             th:utext="${pageEntry.getValue().body()}"
+             th:class="${pageEntry.getValue().pageNumber() == page}? 'page-content active' : 'page-content hidden'"
+             th:style="'font-family: \'' + ${settings.getFont()} + '\', serif !important;'">
+        </div>
         <div th:if="${settings.footer()}" id="footer">
             <div id="footer-left" th:text="'Chapter: ' + ${chapter.chapterTitle()}" />
             <div id="footer-right" th:text="'Page ' + ${page} + ' of ' + ${chapter.maxPage()}" />

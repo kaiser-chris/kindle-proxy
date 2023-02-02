@@ -31,6 +31,14 @@ button {
     font-size: 1em;
 }
 
+select {
+    font-size: 1em;
+}
+
+option {
+    font-size: 1em;
+}
+
 .touch-link {
     position: absolute;
     display: block;
@@ -251,6 +259,14 @@ div.settings-line {
     width: 100%;
     position: relative;
 }
+    div.settings-line select {
+        position: relative;
+        display: inline-block;
+        min-width: 10em;
+        height: 2em;
+        margin: 0.5em 0 0.5em 0;
+        float: right;
+    }
     div.settings-line .switch {
         position: relative;
         display: inline-block;

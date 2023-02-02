@@ -15,12 +15,14 @@ public class UserSettings {
 
     private boolean footer;
 
+    private String font;
+
     public UserSettings() {
-        this(24, true);
+        this(24, true, "Literata");
     }
 
     public UserSettings(int textSize) {
-        this(textSize, true);
+        this(textSize, true, "Literata");
     }
 
     public int textSize() {

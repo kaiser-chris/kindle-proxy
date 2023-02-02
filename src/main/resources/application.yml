@@ -10,7 +10,9 @@ server:
 
 settings:
   font-size-scale: ${SETTINGS_FONT_SIZE_SCALE:12, 16, 20, 24, 28, 32, 36, 40, 44, 48}
+  font-list: ${SETTINGS_FONT_LIST:Literata, Roboto, Merriweather, Open Sans}
   default:
+    font: ${SETTINGS_DEFAULT_FONT:Literata}
     font-size: ${SETTINGS_DEFAULT_FONT_SIZE:24}
     show-footer: ${SETTINGS_DEFAULT_SHOW_FOOTER:true}
 

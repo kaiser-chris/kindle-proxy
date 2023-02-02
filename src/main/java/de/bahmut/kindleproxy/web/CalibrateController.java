@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static org.springframework.web.util.UriUtils.encode;
@@ -34,22 +33,27 @@ public class CalibrateController implements RenderingController {
             @RequestParam(value = "redirect", required = false) String redirect
     ) {
         if (allRequestParams.isEmpty() || !"true".equalsIgnoreCase(allRequestParams.get("calibrated"))) {
-            return new ModelAndView("calibrate");
+            return createModelAndView();
         }
         try {
             final DeviceCalibration calibration = buildCalibration(allRequestParams);
             settingsService.cacheCalibration(calibration);
         } catch (final CalibrationException e) {
             log.warn("Invalid calibration", e);
-            final var webPage = new ModelAndView("calibrate");
-            webPage.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
-            return webPage;
+            return createModelAndView();
         }
         if (redirect != null) {
             return new ModelAndView("redirect:" + redirect);
         } else {
             return new ModelAndView("redirect:/");
         }
+    }
+
+    private ModelAndView createModelAndView() {
+        final var modelAndView = new ModelAndView();
+        modelAndView.setViewName("calibrate");
+        modelAndView.addObject("settings", settingsService.getSettings());
+        return modelAndView;
     }
 
     public static String getCalibrationUrl(

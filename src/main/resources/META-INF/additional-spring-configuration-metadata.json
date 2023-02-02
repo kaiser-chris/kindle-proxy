@@ -19,6 +19,16 @@
       "name": "settings.font-size-scale",
       "type": "java.lang.String",
       "description": "Font size scale in the settings."
+    },
+    {
+      "name": "settings.default.font",
+      "type": "java.lang.String",
+      "description": "Default font."
+    },
+    {
+      "name": "settings.font-list",
+      "type": "java.lang.String",
+      "description": "List of selectable fonts in the settings."
     }
   ]
 }

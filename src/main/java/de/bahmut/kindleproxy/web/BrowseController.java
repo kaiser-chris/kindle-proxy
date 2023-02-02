@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static de.bahmut.kindleproxy.util.RenderingUtils.sizeContentStyle;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static org.springframework.web.util.UriUtils.encode;
@@ -40,7 +39,7 @@ public class BrowseController implements ProxyBasedController {
         final var webPage = createBrowseModelAndView();
         webPage.addObject("title", "Proxies");
         webPage.addObject("currentUrl", "/");
-        webPage.addObject("settings", SettingsController.getSettingsUrl("/"));
+        webPage.addObject("settingsUrl", SettingsController.getSettingsUrl("/"));
         webPage.addObject("list", proxies.stream()
                 .filter(proxy -> isSearched(search, proxy.getName()))
                 .collect(Collectors.toMap(reference -> getProxyUrl(reference.getId()), ProxyService::getName)));
@@ -64,7 +63,7 @@ public class BrowseController implements ProxyBasedController {
             webPage.addObject("currentUrl", getBookUrl(proxyId, bookId));
             webPage.addObject("proxy", proxyId);
             webPage.addObject("book", bookId);
-            webPage.addObject("settings", SettingsController.getSettingsUrl(getBookUrl(proxyId, bookId)));
+            webPage.addObject("settingsUrl", SettingsController.getSettingsUrl(getBookUrl(proxyId, bookId)));
             webPage.addObject("list", book.chapters().stream()
                             .filter(reference -> isSearched(search, reference.name()))
                             .collect(StreamHelper.toOrderedMap(
@@ -76,7 +75,7 @@ public class BrowseController implements ProxyBasedController {
         webPage.addObject("title", "Books");
         webPage.addObject("proxy", proxyId);
         webPage.addObject("currentUrl", getProxyUrl(proxyId));
-        webPage.addObject("settings", SettingsController.getSettingsUrl(getProxyUrl(proxyId)));
+        webPage.addObject("settingsUrl", SettingsController.getSettingsUrl(getProxyUrl(proxyId)));
         webPage.addObject("list", proxy.get().getBooks().stream()
                 .filter(reference -> isSearched(search, reference.name()))
                 .collect(StreamHelper.toOrderedMap(
@@ -96,7 +95,7 @@ public class BrowseController implements ProxyBasedController {
     private ModelAndView createBrowseModelAndView() {
         final var modelAndView = new ModelAndView();
         modelAndView.setViewName("browse");
-        modelAndView.addObject("contentStyle", sizeContentStyle(settingsService.getSettings()));
+        modelAndView.addObject("settings", settingsService.getSettings());
         return modelAndView;
     }
 

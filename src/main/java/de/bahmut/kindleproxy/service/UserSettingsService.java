@@ -1,6 +1,7 @@
 package de.bahmut.kindleproxy.service;
 
 import de.bahmut.kindleproxy.exception.CalibrationException;
+import de.bahmut.kindleproxy.exception.SettingsException;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.model.UserSettings;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class UserSettingsService {
 
     private final CacheService cacheService;
 
+    private final String defaultFont;
     private final int defaultFontSize;
     private final boolean defaultShowFooter;
 
@@ -44,9 +46,11 @@ public class UserSettingsService {
             HttpServletResponse response,
             CalibrationCacheService calibrationCacheService,
             CacheService cacheService,
+            @Value("${settings.default.font}") String defaultFont,
             @Value("${settings.default.font-size}") int defaultFontSize,
             @Value("${settings.default.show-footer}") boolean defaultShowFooter
     ) {
+        this.defaultFont = defaultFont;
         this.defaultFontSize = defaultFontSize;
         this.defaultShowFooter = defaultShowFooter;
         final Cookie userIdentifierCookie = WebUtils.getCookie(request, COOKIE_USER_SESSION);
@@ -123,7 +127,7 @@ public class UserSettingsService {
     }
 
     private String convertToCookieValue(final UserSettings settings) {
-        return settings.textSize() + "|" + settings.footer();
+        return settings.textSize() + "|" + settings.footer() + "|" + settings.getFont().replace(" ", "+");
     }
 
     private UserSettings convertFromCookieValue(final String cookieValue) {
@@ -132,11 +136,18 @@ public class UserSettingsService {
             return switch (parts.length) {
                 case 1 -> new UserSettings(
                         Integer.parseInt(parts[0]),
-                        defaultShowFooter
+                        defaultShowFooter,
+                        defaultFont
                 );
                 case 2 -> new UserSettings(
                         Integer.parseInt(parts[0]),
-                        Boolean.parseBoolean(parts[1])
+                        Boolean.parseBoolean(parts[1]),
+                        defaultFont
+                );
+                case 3 -> new UserSettings(
+                        Integer.parseInt(parts[0]),
+                        Boolean.parseBoolean(parts[1]),
+                        parts[2].replace("+", " ")
                 );
                 default -> initializeSettings();
             };
@@ -149,7 +160,8 @@ public class UserSettingsService {
     private UserSettings initializeSettings() {
         return new UserSettings(
                 defaultFontSize,
-                defaultShowFooter
+                defaultShowFooter,
+                defaultFont
         );
     }
 
