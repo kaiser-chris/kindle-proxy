@@ -113,6 +113,13 @@ public class UserSettingsService {
         response.addCookie(cookie);
         this.settings = settings;
         cacheService.invalidItemsByConditionIdentifier(userIdentifier.toString());
+        try {
+            if (calibrationCacheService.findCalibration(userIdentifier).isPresent()) {
+                calibrationCacheService.deleteCalibration(userIdentifier);
+            }
+        } catch (final CalibrationException e) {
+            throw new SettingsException("Could not remove outdated calibration of user: " + userIdentifier, e);
+        }
     }
 
     private String convertToCookieValue(final UserSettings settings) {
