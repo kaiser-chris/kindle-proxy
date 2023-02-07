@@ -42,7 +42,8 @@ public class RenderController implements ProxyBasedController, RenderingControll
             @PathVariable("proxyId") final UUID proxyId,
             @RequestParam("book") final String bookId,
             @RequestParam("chapter") final String chapterId,
-            @RequestParam(value = "page", required = false, defaultValue = "1") final int page
+            @RequestParam(value = "page", required = false, defaultValue = "1") final int page,
+            @RequestParam(value = "source", required = false) final String source
     ) throws ProxyException, CalibrationException {
         final Optional<ProxyService> proxy = findProxyService(proxyId, proxies);
         if (proxy.isEmpty()) {
@@ -72,6 +73,8 @@ public class RenderController implements ProxyBasedController, RenderingControll
         } else if (page <= 0 && previousChapter == null) {
             return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, 1));
         } else if (page > renderedChapter.maxPage() && nextChapter == null) {
+            return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, renderedChapter.maxPage()));
+        } else if ("prev".equalsIgnoreCase(source)) {
             return new ModelAndView("redirect:" + getRenderUrl(proxyId, bookId, chapterId, renderedChapter.maxPage()));
         } else {
             webPage.setViewName("render/render");
