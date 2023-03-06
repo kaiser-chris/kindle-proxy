@@ -150,7 +150,9 @@ public class WanderingInnProxy extends CachedWebProxyService {
             }
             // Chapters are a-Elements
             if (entry.tag().getName().equalsIgnoreCase("a")) {
-                checkProxyResult(currentVolume == null, "Found chapter in table of contents before first volume");
+                if (currentVolume == null) {
+                    continue;
+                }
                 final String title = entry.text().strip();
                 final String link = entry.attr("href");
                 currentVolume.chapters().add(new Reference(
