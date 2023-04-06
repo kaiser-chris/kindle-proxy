@@ -83,11 +83,13 @@ public class SettingsController {
 
     private ModelAndView createSettingsModelAndView() {
         final var modelAndView = new ModelAndView();
+        final var userSettings = settingsService.getSettings();
         modelAndView.setViewName("settings");
         modelAndView.addObject("calibrate", CalibrateController.getCalibrationUrl(URL_SETTINGS));
         modelAndView.addObject("fontSizeScale", renderFontSizeScale(fontSizeScale));
-        modelAndView.addObject("settings", settingsService.getSettings());
+        modelAndView.addObject("settings", userSettings);
         modelAndView.addObject("fontList", fontList);
+        modelAndView.addObject("sizeIndex", Arrays.asList(fontSizeScale).indexOf(userSettings.getTextSize()));
         return modelAndView;
     }
 

@@ -41,16 +41,16 @@
                         </a>
                     </div>
                     <div class="boxes">
-                        <div class="box-cell"><span class="size-box active"></span></div>
-                        <div class="box-cell"><span class="size-box active"></span></div>
-                        <div class="box-cell"><span class="size-box active"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
-                        <div class="box-cell"><span class="size-box"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 0} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 1} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 2} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 3} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 4} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 5} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 6} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 7} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 8} ? 'size-box active' : 'size-box'"></span></div>
+                        <div class="box-cell"><span th:class="${sizeIndex >= 9} ? 'size-box active' : 'size-box'"></span></div>
                     </div>
                 </div>
                 <hr class="settings-spacer" />

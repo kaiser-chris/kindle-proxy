@@ -34,9 +34,3 @@ function renderTextSize() {
         }
     }
 }
-
-var setupFunction = function executeSetup() {
-    renderTextSize();
-}
-
-window.onload = setupFunction;
