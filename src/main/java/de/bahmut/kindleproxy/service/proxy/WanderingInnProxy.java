@@ -1,7 +1,11 @@
 package de.bahmut.kindleproxy.service.proxy;
 
 import de.bahmut.kindleproxy.exception.ProxyException;
-import de.bahmut.kindleproxy.model.*;
+import de.bahmut.kindleproxy.model.Book;
+import de.bahmut.kindleproxy.model.Chapter;
+import de.bahmut.kindleproxy.model.Proxy;
+import de.bahmut.kindleproxy.model.Reference;
+import de.bahmut.kindleproxy.model.SiblingReference;
 import de.bahmut.kindleproxy.service.CacheService;
 import de.bahmut.kindleproxy.util.ListHelper;
 import lombok.extern.log4j.Log4j2;
