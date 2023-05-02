@@ -13,7 +13,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +28,9 @@ import static de.bahmut.kindleproxy.util.check.ProxyConditions.checkProxyResult;
 @Service
 public class WanderingInnProxy extends CachedWebProxyService {
     private static final String BASE_URL = "https://wanderinginn.com/";
+    private static final URI BASE_URI = UriComponentsBuilder.fromUriString(BASE_URL).build().toUri();
     private static final String URL_TABLE_OF_CONTENTS = BASE_URL + "table-of-contents/";
-    private static final String HTML_SELECTOR_CHAPTERS_AND_VOLUMES = "div#content div.entry-content p a,strong";
+    private static final String HTML_SELECTOR_CHAPTERS_AND_VOLUMES = "div#content div.entry-content p a,h2.volume";
     private static final String HTML_SELECTOR_CHAPTER_CONTENT = "div#content div.entry-content";
 
     public WanderingInnProxy(CacheService cacheService) {
@@ -142,8 +145,8 @@ public class WanderingInnProxy extends CachedWebProxyService {
         final List<Element> entries = page.select(HTML_SELECTOR_CHAPTERS_AND_VOLUMES);
         Book currentVolume = null;
         for (final Element entry : entries) {
-            // Volume Titles are strong-Elements
-            if (entry.tag().getName().equalsIgnoreCase("strong")) {
+            // Volume Titles are h2-Elements
+            if (entry.tag().getName().equalsIgnoreCase("h2")) {
                 final String title = entry.text().strip();
                 currentVolume = new Book(
                         UUID.nameUUIDFromBytes(title.getBytes()).toString(),
@@ -161,7 +164,10 @@ public class WanderingInnProxy extends CachedWebProxyService {
                 final String link = entry.attr("href");
                 currentVolume.chapters().add(new Reference(
                         getChapterIdentifier(link),
-                        link,
+                        UriComponentsBuilder.fromUriString(link)
+                                .host(BASE_URI.getHost())
+                                .scheme(BASE_URI.getScheme())
+                                .toUriString(),
                         title
                 ));
             }

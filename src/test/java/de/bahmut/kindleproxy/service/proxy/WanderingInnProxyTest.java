@@ -20,7 +20,7 @@ class WanderingInnProxyTest extends AbstractProxyImplementationTest {
         testChapter(
                 proxy,
                 "fc452c26-db3c-3aa6-b621-3b9c5d9e3abc",
-                "ef65c474-a636-33cd-995f-fb059a4de4a3",
+                "5f6caafb-7888-364d-a4ca-a7a3d1a04493",
                 "The Wandering Inn",
                 "1.00",
                 "Erin"
@@ -33,7 +33,7 @@ class WanderingInnProxyTest extends AbstractProxyImplementationTest {
         testChapter(
                 proxy,
                 "0dabdb78-5717-3761-97a1-c2db6bf1a14b",
-                "04f7a6e4-6ef7-3e26-8987-1dab242aa090",
+                "2dabf54e-8798-3a7e-80da-245c7a29eddb",
                 "The Wandering Inn",
                 "4.07",
                 "Klbkchhezeim"
