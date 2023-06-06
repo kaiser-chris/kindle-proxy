@@ -30,7 +30,7 @@ public class WanderingInnProxy extends CachedWebProxyService {
     private static final String BASE_URL = "https://wanderinginn.com/";
     private static final URI BASE_URI = UriComponentsBuilder.fromUriString(BASE_URL).build().toUri();
     private static final String URL_TABLE_OF_CONTENTS = BASE_URL + "table-of-contents/";
-    private static final String HTML_SELECTOR_CHAPTERS_AND_VOLUMES = "div#content div.entry-content p a,h2.volume";
+    private static final String HTML_SELECTOR_CHAPTERS_AND_VOLUMES = "div#table-of-contents div.chapter-entry a, div.volume-header h2";
     private static final String HTML_SELECTOR_CHAPTER_CONTENT = "div#content div.entry-content";
 
     public WanderingInnProxy(CacheService cacheService) {
