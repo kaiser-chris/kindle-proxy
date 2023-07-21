@@ -9,6 +9,7 @@ import java.util.Optional;
 import de.bahmut.kindleproxy.handler.cleaner.ContentCleaner;
 import de.bahmut.kindleproxy.handler.element.ElementCalculator;
 import de.bahmut.kindleproxy.handler.element.ParagraphElementCalculator;
+import de.bahmut.kindleproxy.handler.special.SpecialCaseHandler;
 import de.bahmut.kindleproxy.model.Chapter;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import de.bahmut.kindleproxy.model.Page;
@@ -33,6 +34,7 @@ public class PageRenderService {
     private final CacheService cacheService;
     private final List<ContentCleaner> contentCleaners;
     private final List<ElementCalculator> elementCalculators;
+    private final List<SpecialCaseHandler> specialCaseHandlers;
     private final ParagraphElementCalculator paragraphElementCalculator;
 
     public RenderedChapter renderChapter(final Chapter chapter, final DeviceCalibration calibration) {
@@ -42,7 +44,7 @@ public class PageRenderService {
             return cachedChapter.get();
         }
         final Document page = cleanPage(Jsoup.parseBodyFragment(chapter.htmlBody()));
-        final Elements contentElements = page.select("body > *");
+        final Elements contentElements = handleSpecialCases(page.select("body > *"));
         final Map<Integer, Page> pages = renderPages(contentElements, calibration);
         final var render = new RenderedChapter(
                 chapter.identifier(),
@@ -62,6 +64,20 @@ public class PageRenderService {
             cleanPage = cleaner.clean(cleanPage);
         }
         return cleanPage;
+    }
+
+    private Elements handleSpecialCases(final Elements contentElements) {
+        final Elements workingElements = new Elements(contentElements);
+        for (final SpecialCaseHandler handler : specialCaseHandlers) {
+            for (final Element element : workingElements) {
+                if (handler.isTagSupported(element.tagName())) {
+                    var currentIndex = contentElements.indexOf(element);
+                    contentElements.remove(element);
+                    contentElements.addAll(currentIndex, handler.handleSpecialCase(element));
+                }
+            }
+        }
+        return contentElements;
     }
 
     private Map<Integer, Page> renderPages(final Elements contentElements, final DeviceCalibration calibration) {
