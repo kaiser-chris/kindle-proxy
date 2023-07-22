@@ -1,9 +1,8 @@
 package de.bahmut.kindleproxy.exception;
 
-public class NotFoundException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public NotFoundException(String message) {
-        super(message);
-    }
+@StandardException
+public class NotFoundException extends RuntimeException {
 
 }
