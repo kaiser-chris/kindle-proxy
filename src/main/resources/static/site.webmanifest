@@ -1,6 +1,7 @@
 {
 	"name": "Kindle Proxy",
 	"short_name": "Kindle Proxy",
+	"description": "This application proxies different web novel pages and renders them in a Kindle friendly web page. It is meant to be used in the Kindle Web browser.",
 	"icons": [
 		{
 			"src": "/img/favicon/android-chrome-192x192.png",

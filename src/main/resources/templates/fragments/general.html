@@ -1,10 +1,11 @@
 <!DOCTYPE HTML>
 <!--suppress CheckEmptyScriptTag, HtmlRequiredLangAttribute, HtmlUnknownTarget, HtmlRequiredTitleElement -->
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:fragment="headerfiles (title)">
+    <head th:fragment="headerfiles (title, debug)">
         <link rel="stylesheet" type="text/css" href="/css/font.css">
         <link rel="stylesheet" type="text/css" href="/css/main.css">
         <link rel="stylesheet" type="text/css" href="/css/content.css">
+        <link th:if="${debug}" rel="stylesheet" type="text/css" href="/css/debug.css">
         <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">

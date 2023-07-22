@@ -15,6 +15,9 @@ settings:
     font: ${SETTINGS_DEFAULT_FONT:Literata}
     font-size: ${SETTINGS_DEFAULT_FONT_SIZE:24}
     show-footer: ${SETTINGS_DEFAULT_SHOW_FOOTER:true}
+  render:
+    debug: ${SETTINGS_RENDER_DEBUG:false}
+
 
 proxy:
   calibration:

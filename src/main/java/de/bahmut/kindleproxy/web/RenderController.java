@@ -18,6 +18,7 @@ import de.bahmut.kindleproxy.web.base.ProxyBasedController;
 import de.bahmut.kindleproxy.web.base.RenderingController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,9 @@ public class RenderController implements ProxyBasedController, RenderingControll
     private final UserSettingsService settingsService;
     private final List<ProxyService> proxies;
     private final PageRenderService renderService;
+
+    @Value("${settings.render.debug}")
+    private boolean debugRender;
 
     @GetMapping("/render/proxy/{proxyId}/")
     public ModelAndView render(
@@ -89,6 +93,7 @@ public class RenderController implements ProxyBasedController, RenderingControll
         webPage.addObject("next", nextChapter);
         webPage.addObject("book", BrowseController.getBookUrl(proxyId, bookId));
         webPage.addObject("previous", previousChapter);
+        webPage.addObject("debug", debugRender);
         return webPage;
     }
 

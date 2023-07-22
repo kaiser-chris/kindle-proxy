@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:replace="~{fragments/general.html :: headerfiles(title=${chapter.chapterTitle()} + ' | ' + ${chapter.bookTitle()})}">
+    <head th:replace="~{fragments/general.html :: headerfiles(title=${chapter.chapterTitle()} + ' | ' + ${chapter.bookTitle()}, debug=${debug})}">
         <title>Replaced</title>
     </head>
     <body th:style="'font-size: ' + ${settings.textSize()} + 'px !important;'">

@@ -20,6 +20,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import static de.bahmut.kindleproxy.util.PageSpacingCalculator.calculateBodyPadding;
@@ -36,6 +37,9 @@ public class PageRenderService {
     private final List<ElementCalculator> elementCalculators;
     private final List<SpecialCaseHandler> specialCaseHandlers;
     private final ParagraphElementCalculator paragraphElementCalculator;
+
+    @Value("${settings.render.debug}")
+    private boolean debugRender;
 
     public RenderedChapter renderChapter(final Chapter chapter, final DeviceCalibration calibration) {
         final String cacheIdentifier = String.join(";", chapter.identifier(), chapter.bookIdentifier());
@@ -117,15 +121,28 @@ public class PageRenderService {
         return (pageHeight + elementHeight - textSize) > maxPageHeight;
     }
 
+    private void addDebugInformation(final Element element, final int height) {
+        final var debugInformation = new Element("span");
+        debugInformation.attributes().add("class", "debug");
+        debugInformation.text(height + "px");
+        element.appendChild(debugInformation);
+    }
+
     private int calculateElementHeight(final Element element, final DeviceCalibration calibration) {
+        final int size;
         final Optional<ElementCalculator> elementCalculator = elementCalculators.stream()
                 .filter(calculator -> calculator.isTagSupported(element.tag().normalName()))
                 .findFirst();
         if (elementCalculator.isEmpty()) {
             log.warn("Could not find calculator for element: " + element.tag().normalName() + "; Using fallback calculator");
-            return paragraphElementCalculator.calculateElementHeight(element, calibration, settingsService.getSettings());
+            size = paragraphElementCalculator.calculateElementHeight(element, calibration, settingsService.getSettings());
+        } else {
+            size = elementCalculator.get().calculateElementHeight(element, calibration, settingsService.getSettings());
         }
-        return elementCalculator.get().calculateElementHeight(element, calibration, settingsService.getSettings());
+        if (debugRender) {
+            addDebugInformation(element, size);
+        }
+        return size;
     }
 
 }

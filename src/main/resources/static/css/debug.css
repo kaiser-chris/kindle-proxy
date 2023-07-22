@@ -1,0 +1,10 @@
+div.page-content * {
+    position: relative;
+}
+    div.page-content .debug {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        background: #FFFFFF;
+        color: #FF0000;
+    }
