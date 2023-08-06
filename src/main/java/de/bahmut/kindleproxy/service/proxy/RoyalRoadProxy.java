@@ -30,7 +30,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
     private static final String URL_BEST_RATED = BASE_URL + "fictions/best-rated";
     private static final String HTML_SELECTOR_BEST_RATED_LINK = "h2.fiction-title a";
 
-    private static final String URL_PATTERN_FAVORITES = BASE_URL + "profile/%s/favorites";
+    private static final String URL_PATTERN_FAVORITES = BASE_URL + "profile/%s/favorites?page=%s";
     private static final String HTML_SELECTOR_FAVORITE = "div.portlet-body div.mt-element-overlay";
     private static final String HTML_SELECTOR_FAVORITE_BOOK_LINK = ".btn.btn-default.btn-outline";
     private static final String HTML_SELECTOR_FAVORITE_BOOK_TITLE = "img.cover";
@@ -96,23 +96,30 @@ public class RoyalRoadProxy extends CachedWebProxyService {
 
     @Override
     public List<Reference> getBooks() throws ProxyException {
-        final Document page;
+        // When no favorites profile is configured use best rated
         if (StringUtils.isBlank(favoritesUserIdentifier)) {
-            page = retrieveDocument(URL_BEST_RATED);
+            final Document page = retrieveDocument(URL_BEST_RATED);
             return page.select(HTML_SELECTOR_BEST_RATED_LINK).stream()
                     .map(this::getBookReference)
                     .collect(Collectors.toList());
         }
-        page = retrieveDocument(String.format(URL_PATTERN_FAVORITES, favoritesUserIdentifier));
-        final Elements favorites = page.select(HTML_SELECTOR_FAVORITE);
         final List<Reference> books = new LinkedList<>();
-        for (final Element favorite : favorites) {
-            final String title = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_TITLE).stream().findAny().map(element -> element.attr("alt")).orElse(null);
-            final String identifier = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_LINK).stream().map(this::getIdentifier).findAny().orElse(null);
-            if (identifier == null) {
+        // Collect books only from first 10 pages of favorites to keep loading times down
+        for (int i = 1; i <= 10; i++) {
+            final Document page = retrieveDocument(String.format(URL_PATTERN_FAVORITES, favoritesUserIdentifier, i));
+            final Elements favorites = page.select(HTML_SELECTOR_FAVORITE);
+            if (favorites.isEmpty()) {
+                // Cancel further collection when current page has no more favorites
                 continue;
             }
-            books.add(new Reference(identifier, String.format(URL_PATTERN_BOOK, identifier), Objects.requireNonNullElse(title, identifier)));
+            for (final Element favorite : favorites) {
+                final String title = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_TITLE).stream().findAny().map(element -> element.attr("alt")).orElse(null);
+                final String identifier = favorite.select(HTML_SELECTOR_FAVORITE_BOOK_LINK).stream().map(this::getIdentifier).findAny().orElse(null);
+                if (identifier == null) {
+                    continue;
+                }
+                books.add(new Reference(identifier, String.format(URL_PATTERN_BOOK, identifier), Objects.requireNonNullElse(title, identifier)));
+            }
         }
         return books;
     }
