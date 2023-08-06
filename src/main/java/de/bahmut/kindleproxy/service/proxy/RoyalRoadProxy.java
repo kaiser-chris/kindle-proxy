@@ -64,8 +64,18 @@ public class RoyalRoadProxy extends CachedWebProxyService {
         final String chapterName = page.select(HTML_SELECTOR_CHAPTER_TITLE).stream().findAny().map(Element::text).orElse(chapterIdentifier);
         final String bookName = page.select(HTML_SELECTOR_CHAPTER_BOOK_TITLE).stream().findAny().map(Element::text).orElse(bookIdentifier);
         final Elements links = page.select(HTML_SELECTOR_CHAPTER_NAVIGATION);
-        final Element linkNext = links.stream().filter(element -> element.text().contains("Next") && element.text().contains("Chapter")).findAny().orElse(null);
-        final Element linkPrevious = links.stream().filter(element -> element.text().contains("Previous") && element.text().contains("Chapter")).findAny().orElse(null);
+        final SiblingReference nextChapter = links.stream()
+                .filter(element -> element.text().contains("Next") && element.text().contains("Chapter"))
+                .filter(element -> !element.hasAttr("disabled"))
+                .findAny()
+                .map(element -> new SiblingReference(getIdentifier(element), bookIdentifier))
+                .orElse(null);
+        final SiblingReference previousChapter = links.stream()
+                .filter(element -> element.text().contains("Previous") && element.text().contains("Chapter"))
+                .filter(element -> !element.hasAttr("disabled"))
+                .findAny()
+                .map(element -> new SiblingReference(getIdentifier(element), bookIdentifier))
+                .orElse(null);
         final Elements chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
         checkProxyResult(chapterContent.size() > 1, "Found more than one chapter");
         checkProxyResult(chapterContent.size() == 0, "Could not find chapter");
@@ -75,8 +85,8 @@ public class RoyalRoadProxy extends CachedWebProxyService {
                 chapterName,
                 bookName,
                 chapterContent.get(0).html(),
-                new SiblingReference(getIdentifier(linkNext), bookIdentifier),
-                new SiblingReference(getIdentifier(linkPrevious), bookIdentifier)
+                nextChapter,
+                previousChapter
         );
     }
 
