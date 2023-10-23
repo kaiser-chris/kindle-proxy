@@ -12,16 +12,16 @@ class RoyalRoadProxyTest extends AbstractProxyImplementationTest {
     @Autowired
     private RoyalRoadProxy proxy;
 
-    @DisplayName("Verify first chapter of 'Beneath the Dragoneye Moons' can be parsed")
+    @DisplayName("Verify first chapter of 'A Jaded Life' can be parsed")
     @Test
-    void parseBtdemFirstChapter() throws ProxyException {
+    void parseJadedLifeFirstChapter() throws ProxyException {
         testChapter(
                 proxy,
-                "36299/beneath-the-dragoneye-moons",
-                "561246/chapter-1-rebirth",
-                "Beneath the Dragoneye Moons",
-                "Chapter 1 - Rebirth",
-                "galaxies"
+                "19459/a-jaded-life",
+                "234912/chapter-1",
+                "A Jaded Life",
+                "Chapter 1",
+                "be here, Jill"
         );
     }
 
