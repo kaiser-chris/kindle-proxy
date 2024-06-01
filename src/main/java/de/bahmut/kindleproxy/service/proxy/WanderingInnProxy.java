@@ -56,9 +56,9 @@ public class WanderingInnProxy extends CachedWebProxyService {
         final Document page = retrieveDocument(foundChapter.get().link());
         final Elements chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
         checkProxyResult(chapterContent.size() > 1, "Found more than one chapter");
-        checkProxyResult(chapterContent.size() == 0, "Could not find chapter");
+        checkProxyResult(chapterContent.isEmpty(), "Could not find chapter");
         // Clean up pasted chapters
-        if (chapterContent.get(0).children().size() > 0 && "paste-embed-wrapper".equalsIgnoreCase(chapterContent.get(0).children().get(0).id())) {
+        if (!chapterContent.get(0).children().isEmpty() && "paste-embed-wrapper".equalsIgnoreCase(chapterContent.get(0).children().get(0).id())) {
             final Element contentElement = chapterContent.get(0);
             final Element pasteWrapper = chapterContent.get(0).children().get(0);
             final Elements otherChildren = contentElement.children().clone();

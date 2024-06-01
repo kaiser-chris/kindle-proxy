@@ -41,7 +41,7 @@ abstract class AbstractLineCalculator implements ElementCalculator {
             }
             currentLineWidth += wordWidth;
         }
-        log.debug(currentLine + " Lines in: " + cleanLine);
+        log.debug("{} Lines in: {}", currentLine, cleanLine);
         return (int) Math.ceil(currentLine * calculateLineHeight(settings.textSize()));
     }
 

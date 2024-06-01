@@ -152,7 +152,7 @@ public class UserSettingsService {
                 default -> initializeSettings();
             };
         } catch (final Exception e) {
-            log.warn("Could not parse user settings for user " + userIdentifier + " from cookie", e);
+            log.warn("Could not parse user settings for user {} from cookie", userIdentifier, e);
             return initializeSettings();
         }
     }

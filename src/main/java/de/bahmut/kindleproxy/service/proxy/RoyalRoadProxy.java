@@ -78,7 +78,7 @@ public class RoyalRoadProxy extends CachedWebProxyService {
                 .orElse(null);
         final Elements chapterContent = page.select(HTML_SELECTOR_CHAPTER_CONTENT);
         checkProxyResult(chapterContent.size() > 1, "Found more than one chapter");
-        checkProxyResult(chapterContent.size() == 0, "Could not find chapter");
+        checkProxyResult(chapterContent.isEmpty(), "Could not find chapter");
         return new Chapter(
                 chapterIdentifier,
                 bookIdentifier,
@@ -156,13 +156,13 @@ public class RoyalRoadProxy extends CachedWebProxyService {
             return "";
         }
         if ("disabled".equalsIgnoreCase(link.attr("disabled"))) {
-            log.trace("Chapter does not exist or is disabled: " + link);
+            log.trace("Chapter does not exist or is disabled: {}", link);
             return "";
         }
         final String url = link.attr("href");
         final String[] urlParts = url.split("/");
         if (urlParts.length < 2) {
-            log.warn("Found an invalid identifier link: " + url + " in element: " + link);
+            log.warn("Found an invalid identifier link: {} in element: {}", url, link);
             return "";
         }
         return urlParts[urlParts.length - 2] + "/" + urlParts[urlParts.length - 1];

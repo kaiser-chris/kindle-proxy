@@ -134,7 +134,7 @@ public class PageRenderService {
                 .filter(calculator -> calculator.isTagSupported(element.tag().normalName()))
                 .findFirst();
         if (elementCalculator.isEmpty()) {
-            log.warn("Could not find calculator for element: " + element.tag().normalName() + "; Using fallback calculator");
+            log.warn("Could not find calculator for element: {}; Using fallback calculator", element.tag().normalName());
             size = paragraphElementCalculator.calculateElementHeight(element, calibration, settingsService.getSettings());
         } else {
             size = elementCalculator.get().calculateElementHeight(element, calibration, settingsService.getSettings());
