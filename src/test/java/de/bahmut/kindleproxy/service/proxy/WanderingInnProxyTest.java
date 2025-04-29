@@ -2,6 +2,7 @@ package de.bahmut.kindleproxy.service.proxy;
 
 import de.bahmut.kindleproxy.exception.ProxyException;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @RequiredArgsConstructor
+@Disabled
 class WanderingInnProxyTest extends AbstractProxyImplementationTest {
 
     @Autowired

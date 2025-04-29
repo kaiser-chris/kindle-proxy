@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static de.bahmut.kindleproxy.util.check.ProxyConditions.checkProxyResult;
 
 @Log4j2
-@Service
+//@Service
 public class WanderingInnProxy extends CachedWebProxyService {
     private static final String BASE_URL = "https://wanderinginn.com/";
     private static final URI BASE_URI = UriComponentsBuilder.fromUriString(BASE_URL).build().toUri();
