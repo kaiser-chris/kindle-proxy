@@ -6,11 +6,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bahmut.kindleproxy.exception.CalibrationException;
 import de.bahmut.kindleproxy.model.DeviceCalibration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class CalibrationCacheService {
