@@ -60,6 +60,8 @@ public class UserSettingsService {
         } else {
             this.userIdentifier = UUID.randomUUID();
             final Cookie cookie = new Cookie(COOKIE_USER_SESSION, this.userIdentifier.toString());
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
             response.addCookie(cookie);
         }
         this.calibrationCacheService = calibrationCacheService;
